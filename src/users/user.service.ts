@@ -1,7 +1,7 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@/user/entities/user.entity';
+import { UserEntity } from '@/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { HttpStatus } from '@nestjs/common/enums/http-status.enum';
 
@@ -15,15 +15,14 @@ export class UserService {
 
   async createUser(data: any) {
     try {
-      console.log('dataService', data);
-      const user = this.UserRepository.create({
-        firstName: 'ivan',
-      });
-      console.log('USER', user);
+      const user = this.UserRepository.create(data);
       await this.UserRepository.save(user);
       return user;
     } catch (err) {
-      new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        errors: [err.message],
+      };
     }
   }
 }
