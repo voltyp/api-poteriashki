@@ -3,18 +3,13 @@ FROM node:lts as builder
 # Create app directory
 WORKDIR /app
 
-ARG NPM_TOKEN
-ENV NPM_TOKEN=ufsMzXm1-PCsmWnV2VsF
-
 COPY package*.json ./
-COPY .npmrc ./
 
 # Install app dependencies
 #321
 RUN npm install glob rimraf
 
 RUN npm install
-RUN rm -f .npmrc
 
 COPY . .
 
