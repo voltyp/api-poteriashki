@@ -25,4 +25,28 @@ export class UserService {
       };
     }
   }
+
+  async updateUser(id: number, data: any) {
+    try {
+      await this.UserRepository.update(id, data);
+      return await this.UserRepository.findOneBy({ id });
+    } catch (err) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        errors: [err.message],
+      };
+    }
+  }
+
+  async removeUser(id: number) {
+    try {
+      const user = await this.UserRepository.findOneBy({ id });
+      await this.UserRepository.remove(user);
+    } catch (err) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        errors: [err.message],
+      };
+    }
+  }
 }
