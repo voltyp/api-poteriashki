@@ -6,6 +6,7 @@ import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
+import { AnimalsModule } from './animals/animals.module';
 import databaseConfig from './database/db.config';
 
 @Module({
@@ -22,6 +23,7 @@ import databaseConfig from './database/db.config';
       },
     }),
     UserModule,
+    AnimalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
