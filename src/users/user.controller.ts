@@ -6,6 +6,7 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  Get,
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
@@ -15,6 +16,11 @@ import { UserUpdateDto } from './dto/user-update.dto';
 @Controller('users')
 export class UserController {
   constructor(readonly userService: UserService) {}
+
+  @Get(':id')
+  async getUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getUser(id);
+  }
 
   @Post()
   async createUser(@Body() data: UserCreateDto) {

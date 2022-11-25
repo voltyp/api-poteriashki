@@ -15,6 +15,17 @@ export class UserService {
     private readonly UserRepository: Repository<UserEntity>,
   ) {}
 
+  async getUser(id: number) {
+    try {
+      return await this.UserRepository.findOneBy({ id });
+    } catch (err) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        errors: [err.message],
+      };
+    }
+  }
+
   async createUser(data: UserCreateDto) {
     try {
       const user = this.UserRepository.create(data);
