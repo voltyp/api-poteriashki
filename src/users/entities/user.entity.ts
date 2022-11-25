@@ -1,4 +1,5 @@
 import { Entity, Column, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { RoleEnum, StatusUserEnum } from '@/users/types/user.type';
 
 @Entity({ name: 'users' })
@@ -24,6 +25,7 @@ export class UserEntity {
   phone: string;
 
   @Column({ type: 'bytea', nullable: true })
+  @Exclude()
   password?: Buffer;
 
   @Column({ nullable: true })
@@ -36,6 +38,7 @@ export class UserEntity {
   lastLogin?: Date;
 
   @Column({ type: 'bytea', nullable: true })
+  @Exclude()
   hashedRt?: Buffer;
 
   @Column({
