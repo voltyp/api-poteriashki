@@ -26,6 +26,17 @@ export class UserService {
     }
   }
 
+  async getAllUsers() {
+    try {
+      return await this.UserRepository.find();
+    } catch (err) {
+      return {
+        status: HttpStatus.BAD_REQUEST,
+        errors: [err.message],
+      };
+    }
+  }
+
   async createUser(data: UserCreateDto) {
     try {
       const user = this.UserRepository.create(data);
