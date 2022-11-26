@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { HttpStatus } from '@nestjs/common/enums/http-status.enum';
-import { UserCreateDto } from './dto/user-create.dto';
-import { UserUpdateDto } from './dto/user-update.dto';
+
+import { UserEntity } from './entities/user.entity';
+import { UserCreateDto, UserUpdateDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -16,61 +15,31 @@ export class UserService {
   ) {}
 
   async getUser(id: number) {
-    try {
-      return await this.UserRepository.findOneBy({ id });
-    } catch (err) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        errors: [err.message],
-      };
-    }
+    return await this.UserRepository.findOneBy({ id });
   }
 
   async getAllUsers() {
-    try {
-      return await this.UserRepository.find();
-    } catch (err) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        errors: [err.message],
-      };
-    }
+    return await this.UserRepository.find();
   }
 
   async createUser(data: UserCreateDto) {
-    try {
-      const user = this.UserRepository.create(data);
-      await this.UserRepository.save(user);
-      return user;
-    } catch (err) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        errors: [err.message],
-      };
-    }
+    const user = this.UserRepository.create(data);
+    await this.UserRepository.save(user);
+    return user;
   }
 
   async updateUser(id: number, data: UserUpdateDto) {
-    try {
-      await this.UserRepository.update(id, data);
-      return await this.UserRepository.findOneBy({ id });
-    } catch (err) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        errors: [err.message],
-      };
-    }
+    await this.UserRepository.update(id, data);
+    return await this.UserRepository.findOneBy({ id });
   }
 
   async removeUser(id: number) {
-    try {
-      const user = await this.UserRepository.findOneBy({ id });
-      await this.UserRepository.remove(user);
-    } catch (err) {
-      return {
-        status: HttpStatus.BAD_REQUEST,
-        errors: [err.message],
-      };
+    const user = await this.UserRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден.');
     }
+
+    await this.UserRepository.remove(user);
   }
 }

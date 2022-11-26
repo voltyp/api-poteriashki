@@ -1,16 +1,24 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { BreedEntity } from '@/animals/entities/breed.entity';
+import { BreedEntity, ColorEntity, FurEntity, TypeAnimalEntity } from './';
 
 @Entity({ name: 'animals' })
 export class AnimalsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
-  code: string;
+  @Column()
+  categoryCode: string;
 
-  @Column({ nullable: false })
-  typeAnimal: string;
+  @Column({ unique: true })
+  userCode: string;
+
+  @Column({ default: false })
+  isSpayed: boolean;
+
+  @ManyToOne(() => TypeAnimalEntity, (type) => type.value, {
+    eager: true,
+  })
+  typeAnimal: TypeAnimalEntity;
 
   @Column({ nullable: false })
   name: string;
@@ -18,19 +26,23 @@ export class AnimalsEntity {
   @Column({ nullable: true })
   sex: string;
 
-  @Column()
-  age: number;
+  @Column({ nullable: false })
+  birthday: Date;
 
   @ManyToOne(() => BreedEntity, (breed) => breed.value, {
     eager: true,
   })
   breed: BreedEntity;
 
-  @Column()
-  fur: string;
+  @ManyToOne(() => FurEntity, (fur) => fur.value, {
+    eager: true,
+  })
+  fur: FurEntity;
 
-  @Column()
-  color: string;
+  @ManyToOne(() => ColorEntity, (color) => color.value, {
+    eager: true,
+  })
+  color: ColorEntity;
 
   @Column()
   status: string;

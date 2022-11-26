@@ -1,4 +1,11 @@
-import { Entity, Column, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  Index,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { RoleEnum, StatusUserEnum } from '@/users/types/user.type';
 
@@ -57,9 +64,9 @@ export class UserEntity {
   })
   status: StatusUserEnum;
 
-  @Column({ nullable: true })
-  lastChangePasswordRequest?: Date;
+  @CreateDateColumn()
+  createdDate: Date;
 
-  @Column({ nullable: true })
-  hashedRequest?: string;
+  @UpdateDateColumn()
+  updatedDate: Date;
 }
