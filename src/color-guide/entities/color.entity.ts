@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, OneToMany, Column } from 'typeorm';
-import { AnimalsEntity } from './animals.entity';
+import { AnimalEntity } from '@/animals/entities/animal.entity';
 
 @Entity({ name: 'color' })
 export class ColorEntity {
@@ -9,6 +9,6 @@ export class ColorEntity {
   @Column()
   value: string;
 
-  @OneToMany(() => AnimalsEntity, (animal) => animal.color)
-  animal: AnimalsEntity;
+  @OneToMany(() => AnimalEntity, (animal) => animal.color)
+  animal: AnimalEntity;
 }

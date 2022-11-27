@@ -13,30 +13,6 @@ export class AnimalsController {
     return this.animalsService.createAnimal(data);
   }
 
-  @Post('breed')
-  @ApiOperation({ summary: 'Добавление породы' })
-  async createBreed(@Body() data: any) {
-    return this.animalsService.createBreed(data);
-  }
-
-  @Post('type')
-  @ApiOperation({ summary: 'Добавление вида животного' })
-  async createType(@Body() data: any) {
-    return this.animalsService.createType(data);
-  }
-
-  @Post('fur')
-  @ApiOperation({ summary: 'Добавление типа шерсти животного' })
-  async createFur(@Body() data: any) {
-    return this.animalsService.createFur(data);
-  }
-
-  @Post('color')
-  @ApiOperation({ summary: 'Добавление окраса животного' })
-  async createColor(@Body() data: any) {
-    return this.animalsService.createColor(data);
-  }
-
   @Get()
   @ApiOperation({ summary: 'Получить список животных' })
   async getAnimals() {

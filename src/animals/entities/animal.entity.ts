@@ -1,16 +1,25 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { BreedEntity, ColorEntity, FurEntity, TypeAnimalEntity } from './';
 
-@Entity({ name: 'animals' })
-export class AnimalsEntity {
+import { AnimalStatus, CategoryCode } from '@/animals/types/animal.type';
+
+import { TypeAnimalEntity } from '@/type-animal-guide/entities/type-animal.entity';
+import { BreedEntity } from '@/breed-guide/entities/breed.entity';
+import { FurEntity } from '@/fur-guide/entities/fur.entity';
+import { ColorEntity } from '@/color-guide/entities/color.entity';
+
+@Entity({ name: 'animal' })
+export class AnimalEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   categoryCode: string;
 
-  @Column({ unique: true })
-  userCode: string;
+  @Column({
+    type: 'enum',
+    enum: CategoryCode,
+  })
+  userCode: CategoryCode;
 
   @Column({ default: false })
   isSpayed: boolean;
@@ -27,7 +36,7 @@ export class AnimalsEntity {
   sex: string;
 
   @Column({ nullable: false })
-  birthday: Date;
+  birthdate: Date;
 
   @ManyToOne(() => BreedEntity, (breed) => breed.value, {
     eager: true,
@@ -44,8 +53,12 @@ export class AnimalsEntity {
   })
   color: ColorEntity;
 
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: AnimalStatus,
+    default: AnimalStatus.Check,
+  })
+  status: AnimalStatus;
 
   @Column()
   curator: string;
