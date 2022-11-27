@@ -2,12 +2,15 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
-import { CreateParametersDto } from '@/animals/dto/parameters.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BreedEntity } from './entities/breed.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { CreateBreedDto } from './dto';
+import { BreedEntity } from './entities/breed.entity';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
+import { UpdateTypeAnimalDto } from '@/type-animal-guide/dto';
 
 @Injectable()
 export class BreedGuideService {
@@ -16,12 +19,12 @@ export class BreedGuideService {
     private readonly BreedRepository: Repository<BreedEntity>,
   ) {}
 
-  async createBreed(data: CreateParametersDto) {
+  async createBreed(data: CreateBreedDto): Promise<BreedEntity> {
     try {
-      const value = this.BreedRepository.create(data);
-      await this.BreedRepository.save(value);
+      const breed = this.BreedRepository.create(data);
+      await this.BreedRepository.save(breed);
 
-      return value;
+      return breed;
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new BadRequestException('Порода уже существует.');
@@ -31,11 +34,26 @@ export class BreedGuideService {
     }
   }
 
-  async getAllBreed() {
+  async getAllBreed(): Promise<BreedEntity[]> {
     return this.BreedRepository.find({
       relations: {
         typeAnimal: true,
       },
     });
+  }
+
+  async updateBreed({ id, value }: UpdateTypeAnimalDto): Promise<BreedEntity> {
+    await this.BreedRepository.update(id, { value });
+    return this.BreedRepository.findOneBy({ id });
+  }
+
+  async removeBreed(id: number): Promise<void> {
+    const breed = await this.BreedRepository.findOneBy({ id });
+
+    if (!breed) {
+      throw new NotFoundException('Порода не найдена.');
+    }
+
+    await this.BreedRepository.remove(breed);
   }
 }

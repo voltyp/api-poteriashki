@@ -42,11 +42,11 @@ export class ColorGuideController {
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление окраса животного' })
-  async updateColor(data: UpdateColorDto): Promise<ColorEntity> {
+  async updateColor(@Body() data: UpdateColorDto): Promise<ColorEntity> {
     return this.colorService.updateColor(data);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Удаление окраса' })
   @ApiOkResponse({ description: 'Окрас успешно удален.' })
   @ApiNotFoundResponse({ description: 'Окрас не найден.' })

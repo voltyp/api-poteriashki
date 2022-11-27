@@ -29,12 +29,12 @@ export class ColorGuideService {
   }
 
   async removeColor(id: number): Promise<void> {
-    const fur = await this.ColorRepository.findOneBy({ id });
+    const color = await this.ColorRepository.findOneBy({ id });
 
-    if (!fur) {
+    if (!color) {
       throw new NotFoundException('Окрас не найден.');
     }
 
-    await this.ColorRepository.remove(fur);
+    await this.ColorRepository.remove(color);
   }
 }
