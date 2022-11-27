@@ -1,2 +1,2 @@
-export * from './сolor-create.dto';
-export * from './сolor-update.dto';
+export * from './create-сolor.dto';
+export * from './update-сolor.dto';

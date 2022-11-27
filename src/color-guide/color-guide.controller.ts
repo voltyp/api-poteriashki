@@ -18,8 +18,7 @@ import {
 } from '@nestjs/swagger';
 
 import { ColorGuideService } from './color-guide.service';
-import { ColorCreateDto } from '@/color-guide/dto/сolor-create.dto';
-import { ColorUpdateDto } from '@/color-guide/dto';
+import { UpdateColorDto, CreateColorDto } from './dto';
 import { ColorEntity } from '@/color-guide/entities/color.entity';
 
 @ApiTags('Color-guide')
@@ -30,7 +29,7 @@ export class ColorGuideController {
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Добавление окраса животного' })
-  async createColor(@Body() data: ColorCreateDto): Promise<ColorEntity> {
+  async createColor(@Body() data: CreateColorDto): Promise<ColorEntity> {
     return this.colorService.createColor(data);
   }
 
@@ -43,7 +42,7 @@ export class ColorGuideController {
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление окраса животного' })
-  async updateColor(data: ColorUpdateDto): Promise<ColorEntity> {
+  async updateColor(data: UpdateColorDto): Promise<ColorEntity> {
     return this.colorService.updateColor(data);
   }
 

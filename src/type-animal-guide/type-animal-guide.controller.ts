@@ -19,7 +19,7 @@ import {
 
 import { TypeAnimalGuideService } from './type-animal-guide.service';
 import {
-  TypeAnimalCreateDto,
+  CreateTypeAnimalDto,
   UpdateTypeAnimalDto,
 } from '@/type-animal-guide/dto';
 import { TypeAnimalEntity } from '@/type-animal-guide/entities/type-animal.entity';
@@ -33,7 +33,7 @@ export class TypeAnimalGuideController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Добавление вида животного' })
   async createType(
-    @Body() data: TypeAnimalCreateDto,
+    @Body() data: CreateTypeAnimalDto,
   ): Promise<TypeAnimalEntity> {
     return this.typeAnimalsService.createType(data);
   }

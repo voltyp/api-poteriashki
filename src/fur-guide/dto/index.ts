@@ -1,2 +1,2 @@
-export * from './fur-create.dto';
-export * from './fur-update.dto';
+export * from './create-fur.dto';
+export * from './update-fur.dto';

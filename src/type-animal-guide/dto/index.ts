@@ -1,2 +1,2 @@
-export * from './type-animal-create.dto';
+export * from './create-type-animal.dto';
 export * from './update-type-animal.dto';

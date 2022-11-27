@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { ColorEntity } from './entities/color.entity';
-import { ColorUpdateDto } from '@/color-guide/dto';
+import { UpdateColorDto, CreateColorDto } from './dto';
 
 @Injectable()
 export class ColorGuideService {
@@ -12,7 +12,7 @@ export class ColorGuideService {
     private readonly ColorRepository: Repository<ColorEntity>,
   ) {}
 
-  async createColor(data: { value: string }): Promise<ColorEntity> {
+  async createColor(data: CreateColorDto): Promise<ColorEntity> {
     const value = this.ColorRepository.create(data);
     await this.ColorRepository.save(value);
 
@@ -23,7 +23,7 @@ export class ColorGuideService {
     return this.ColorRepository.find();
   }
 
-  async updateColor({ id, value }: ColorUpdateDto): Promise<ColorEntity> {
+  async updateColor({ id, value }: UpdateColorDto): Promise<ColorEntity> {
     await this.ColorRepository.update(id, { value });
     return this.ColorRepository.findOneBy({ id });
   }

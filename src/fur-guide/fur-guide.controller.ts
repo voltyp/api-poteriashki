@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 
 import { FurGuideService } from './fur-guide.service';
-import { FurCreateDto, FurUpdateDto } from './dto';
+import { CreateFurDto, UpdateFurDto } from './dto';
 import { FurEntity } from './entities/fur.entity';
 
 @ApiTags('Fur-guide')
@@ -29,7 +29,7 @@ export class FurGuideController {
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Добавление типа шерсти животного' })
-  async createFur(@Body() data: FurCreateDto): Promise<FurEntity> {
+  async createFur(@Body() data: CreateFurDto): Promise<FurEntity> {
     return this.FurService.createFur(data);
   }
 
@@ -42,7 +42,7 @@ export class FurGuideController {
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление типа шерсти' })
-  async updateFur(@Body() data: FurUpdateDto): Promise<FurEntity> {
+  async updateFur(@Body() data: UpdateFurDto): Promise<FurEntity> {
     return this.FurService.updateFur(data);
   }
 

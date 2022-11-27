@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { TypeAnimalCreateDto, UpdateTypeAnimalDto } from './dto';
+import { CreateTypeAnimalDto, UpdateTypeAnimalDto } from './dto';
 import { TypeAnimalEntity } from './entities/type-animal.entity';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 
@@ -18,7 +18,7 @@ export class TypeAnimalGuideService {
     private readonly TypeRepository: Repository<TypeAnimalEntity>,
   ) {}
 
-  async createType(data: TypeAnimalCreateDto): Promise<TypeAnimalEntity> {
+  async createType(data: CreateTypeAnimalDto): Promise<TypeAnimalEntity> {
     try {
       const value = this.TypeRepository.create(data);
       await this.TypeRepository.save(value);
