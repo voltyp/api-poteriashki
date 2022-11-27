@@ -37,10 +37,9 @@ export class TypeAnimalGuideService {
     return this.TypeRepository.find();
   }
 
-  async updateType(data: UpdateTypeAnimalDto) {
-    const { id, value } = data;
+  async updateType({ id, value }: UpdateTypeAnimalDto) {
     await this.TypeRepository.update(id, { value });
-    return await this.TypeRepository.findOneBy({ id });
+    return this.TypeRepository.findOneBy({ id });
   }
 
   async removeType(id: number) {

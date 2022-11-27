@@ -16,9 +16,7 @@ export class BreedEntity {
   @Column()
   value: string;
 
-  @ManyToOne(() => TypeAnimalEntity, (type) => type.value, {
-    eager: true,
-  })
+  @ManyToOne(() => TypeAnimalEntity, (type) => type.value)
   typeAnimal: string;
 
   @OneToMany(() => AnimalEntity, (animal) => animal.breed)

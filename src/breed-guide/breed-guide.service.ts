@@ -32,6 +32,10 @@ export class BreedGuideService {
   }
 
   async getAllBreed() {
-    return this.BreedRepository.find();
+    return this.BreedRepository.find({
+      relations: {
+        typeAnimal: true,
+      },
+    });
   }
 }

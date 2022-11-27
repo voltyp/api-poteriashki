@@ -43,6 +43,7 @@ export class TypeAnimalGuideController {
 
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiOperation({ summary: 'Обновление вида' })
   async updateType(@Body() data: UpdateTypeAnimalDto) {
     return this.typeAnimalsService.updateType(data);
   }
@@ -52,6 +53,6 @@ export class TypeAnimalGuideController {
   @ApiOkResponse({ description: 'Вид успешно удален.' })
   @ApiNotFoundResponse({ description: 'Вид не найден.' })
   async removeType(@Param('id', ParseIntPipe) id: number) {
-    return this.typeAnimalsService.removeType(+id);
+    return this.typeAnimalsService.removeType(id);
   }
 }
