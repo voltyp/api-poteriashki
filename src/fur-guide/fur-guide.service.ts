@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { FurEntity } from './entities/fur.entity';
-import { FurCreateDto } from './dto/fur-create.dto';
+import { FurCreateDto, FurUpdateDto } from './dto';
+import { ColorEntity } from '@/color-guide/entities/color.entity';
 
 @Injectable()
 export class FurGuideService {
@@ -19,16 +20,16 @@ export class FurGuideService {
     return value;
   }
 
-  async getFurList() {
+  async getFurList(): Promise<ColorEntity[]> {
     return this.FurRepository.find();
   }
 
-  async updateFur({ id, value }: any) {
+  async updateFur({ id, value }: FurUpdateDto): Promise<ColorEntity> {
     await this.FurRepository.update(id, { value });
     return this.FurRepository.findOneBy({ id });
   }
 
-  async removeFur(id: number) {
+  async removeFur(id: number): Promise<void> {
     const fur = await this.FurRepository.findOneBy({ id });
 
     if (!fur) {

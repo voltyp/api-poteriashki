@@ -22,6 +22,7 @@ import {
   TypeAnimalCreateDto,
   UpdateTypeAnimalDto,
 } from '@/type-animal-guide/dto';
+import { TypeAnimalEntity } from '@/type-animal-guide/entities/type-animal.entity';
 
 @ApiTags('Type-animal-guide')
 @Controller('type-animal-guide')
@@ -31,20 +32,24 @@ export class TypeAnimalGuideController {
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Добавление вида животного' })
-  async createType(@Body() data: TypeAnimalCreateDto) {
+  async createType(
+    @Body() data: TypeAnimalCreateDto,
+  ): Promise<TypeAnimalEntity> {
     return this.typeAnimalsService.createType(data);
   }
 
   @Get()
   @ApiOperation({ summary: 'Получение списка видов животных' })
-  async getTypeList() {
+  async getTypeList(): Promise<TypeAnimalEntity[]> {
     return this.typeAnimalsService.getTypeList();
   }
 
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление вида' })
-  async updateType(@Body() data: UpdateTypeAnimalDto) {
+  async updateType(
+    @Body() data: UpdateTypeAnimalDto,
+  ): Promise<TypeAnimalEntity> {
     return this.typeAnimalsService.updateType(data);
   }
 
@@ -52,7 +57,7 @@ export class TypeAnimalGuideController {
   @ApiOperation({ summary: 'Удаление вида животного' })
   @ApiOkResponse({ description: 'Вид успешно удален.' })
   @ApiNotFoundResponse({ description: 'Вид не найден.' })
-  async removeType(@Param('id', ParseIntPipe) id: number) {
+  async removeType(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.typeAnimalsService.removeType(id);
   }
 }

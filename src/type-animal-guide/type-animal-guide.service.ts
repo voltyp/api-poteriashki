@@ -18,7 +18,7 @@ export class TypeAnimalGuideService {
     private readonly TypeRepository: Repository<TypeAnimalEntity>,
   ) {}
 
-  async createType(data: TypeAnimalCreateDto) {
+  async createType(data: TypeAnimalCreateDto): Promise<TypeAnimalEntity> {
     try {
       const value = this.TypeRepository.create(data);
       await this.TypeRepository.save(value);
@@ -33,16 +33,19 @@ export class TypeAnimalGuideService {
     }
   }
 
-  async getTypeList() {
+  async getTypeList(): Promise<TypeAnimalEntity[]> {
     return this.TypeRepository.find();
   }
 
-  async updateType({ id, value }: UpdateTypeAnimalDto) {
+  async updateType({
+    id,
+    value,
+  }: UpdateTypeAnimalDto): Promise<TypeAnimalEntity> {
     await this.TypeRepository.update(id, { value });
     return this.TypeRepository.findOneBy({ id });
   }
 
-  async removeType(id: number) {
+  async removeType(id: number): Promise<void> {
     const animalType = await this.TypeRepository.findOneBy({ id });
 
     if (!animalType) {

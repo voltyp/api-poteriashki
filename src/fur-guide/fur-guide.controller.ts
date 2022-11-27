@@ -18,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 
 import { FurGuideService } from './fur-guide.service';
-import { FurCreateDto } from './dto/fur-create.dto';
+import { FurCreateDto, FurUpdateDto } from './dto';
 import { FurEntity } from './entities/fur.entity';
 
 @ApiTags('Fur-guide')
@@ -35,14 +35,14 @@ export class FurGuideController {
 
   @Get()
   @ApiOperation({ summary: 'Получение списка типа шерсти' })
-  async getFurList() {
+  async getFurList(): Promise<FurEntity[]> {
     return this.FurService.getFurList();
   }
 
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление типа шерсти' })
-  async updateFur(@Body() data: any) {
+  async updateFur(@Body() data: FurUpdateDto): Promise<FurEntity> {
     return this.FurService.updateFur(data);
   }
 
@@ -50,7 +50,7 @@ export class FurGuideController {
   @ApiOperation({ summary: 'Удаление типа шерсти' })
   @ApiOkResponse({ description: 'Тип шерсти успешно удален.' })
   @ApiNotFoundResponse({ description: 'Тип шерсти не найден.' })
-  async removeFur(@Param('id', ParseIntPipe) id: number) {
+  async removeFur(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.FurService.removeFur(id);
   }
 }
