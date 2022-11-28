@@ -34,7 +34,7 @@ export class BreedGuideService {
     }
   }
 
-  async getAllBreed(): Promise<BreedEntity[]> {
+  async getListBreed(): Promise<BreedEntity[]> {
     return this.BreedRepository.find({
       relations: {
         typeAnimal: true,

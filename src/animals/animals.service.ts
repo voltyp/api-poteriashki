@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AnimalEntity } from '@/animals/entities/animal.entity';
+import { CreateAnimalDto } from '@/animals/dto/сreate-animal.dto';
 
 @Injectable()
 export class AnimalsService {
@@ -12,7 +13,7 @@ export class AnimalsService {
     private readonly AnimalsRepository: Repository<AnimalEntity>,
   ) {}
 
-  async createAnimal(data: any) {
+  async createAnimal(data: CreateAnimalDto) {
     const animal = this.AnimalsRepository.create(data);
     await this.AnimalsRepository.save(animal);
   }

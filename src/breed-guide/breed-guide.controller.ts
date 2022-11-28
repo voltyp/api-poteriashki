@@ -36,7 +36,7 @@ export class BreedGuideController {
   @Get()
   @ApiOperation({ summary: 'Получения списка пород' })
   async getBreedList(): Promise<BreedEntity[]> {
-    return this.breedGuideService.getAllBreed();
+    return this.breedGuideService.getListBreed();
   }
 
   @Patch()

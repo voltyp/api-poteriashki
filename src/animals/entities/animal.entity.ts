@@ -1,6 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import { AnimalStatus, CategoryCode } from '@/animals/types/animal.type';
+import {
+  AnimalStatus,
+  CategoryCode,
+  SexType,
+} from '@/animals/types/animal.type';
 
 import { TypeAnimalEntity } from '@/type-animal-guide/entities/type-animal.entity';
 import { BreedEntity } from '@/breed-guide/entities/breed.entity';
@@ -12,14 +16,14 @@ export class AnimalEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  categoryCode: string;
-
   @Column({
     type: 'enum',
     enum: CategoryCode,
   })
-  userCode: CategoryCode;
+  categoryCode: CategoryCode;
+
+  @Column()
+  userCode: string;
 
   @Column({ default: false })
   isSpayed: boolean;
@@ -32,8 +36,11 @@ export class AnimalEntity {
   @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: true })
-  sex: string;
+  @Column({
+    type: 'enum',
+    enum: SexType,
+  })
+  sex: SexType;
 
   @Column({ nullable: false })
   birthdate: Date;
