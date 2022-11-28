@@ -9,6 +9,11 @@ export enum AnimalStatus {
 }
 
 export enum CategoryCode {
-  NewCat,
-  NewDog,
+  NewCat = 'НК',
+  NewDog = 'НС',
+}
+
+export enum SexType {
+  Male,
+  Female,
 }

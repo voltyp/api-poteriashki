@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AnimalsService } from '@/animals/animals.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateAnimalDto } from '@/animals/dto/сreate-animal.dto';
 
 @ApiTags('Animals')
 @Controller('animals')
@@ -9,32 +10,9 @@ export class AnimalsController {
 
   @Post()
   @ApiOperation({ summary: 'добавление нового животного' })
-  async createAnimal(@Body() data: any) {
+  async createAnimal(@Body() data: CreateAnimalDto) {
+    console.log('data', data);
     return this.animalsService.createAnimal(data);
-  }
-
-  @Post('breed')
-  @ApiOperation({ summary: 'Добавление породы' })
-  async createBreed(@Body() data: any) {
-    return this.animalsService.createBreed(data);
-  }
-
-  @Post('type')
-  @ApiOperation({ summary: 'Добавление вида животного' })
-  async createType(@Body() data: any) {
-    return this.animalsService.createType(data);
-  }
-
-  @Post('fur')
-  @ApiOperation({ summary: 'Добавление типа шерсти животного' })
-  async createFur(@Body() data: any) {
-    return this.animalsService.createFur(data);
-  }
-
-  @Post('color')
-  @ApiOperation({ summary: 'Добавление окраса животного' })
-  async createColor(@Body() data: any) {
-    return this.animalsService.createColor(data);
   }
 
   @Get()
