@@ -8,6 +8,10 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import { AnimalsModule } from './animals/animals.module';
 import { SphereAttributesGuideModule } from './sphere-attributes-guide/sphere-attributes-guide.module';
+import { FurGuideModule } from './fur-guide/fur-guide.module';
+import { BreedGuideModule } from './breed-guide/breed-guide.module';
+import { TypeAnimalGuideModule } from './type-animal-guide/type-animal-guide.module';
+import { ColorGuideModule } from './color-guide/color-guide.module';
 import databaseConfig from './database/db.config';
 
 @Module({
@@ -26,6 +30,10 @@ import databaseConfig from './database/db.config';
     UserModule,
     AnimalsModule,
     SphereAttributesGuideModule,
+    FurGuideModule,
+    BreedGuideModule,
+    TypeAnimalGuideModule,
+    ColorGuideModule,
   ],
   controllers: [AppController],
   providers: [AppService],
