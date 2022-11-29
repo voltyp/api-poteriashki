@@ -1,8 +1,8 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { UserEntity } from '@/users/entities/user.entity';
 import { AbstractEntity } from '@/common/entities/abstract.entity';
 
-@Entity({ name: 'color' })
+@Entity({ name: 'sphere_attributes_guide' })
 export class SphereAttributesGuide extends AbstractEntity {
   @Column({
     type: 'varchar',
@@ -18,6 +18,7 @@ export class SphereAttributesGuide extends AbstractEntity {
   })
   comments?: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.sphereAttributes)
-  user: UserEntity;
+  @ManyToMany(() => UserEntity)
+  @JoinTable()
+  user: UserEntity[];
 }

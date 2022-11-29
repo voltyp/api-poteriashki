@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
@@ -35,7 +33,5 @@ import databaseConfig from './database/db.config';
     TypeAnimalGuideModule,
     ColorGuideModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
