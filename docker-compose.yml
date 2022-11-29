@@ -1,16 +1,6 @@
 version: '3.7'
 services:
-  poteriashki_svc:
-    build:
-      context: .
-    depends_on:
-      - postgres
-    container_name: poteriashki
-    env_file:
-      - .env
-    restart: unless-stopped
-
-  postgres_poteriashki_svc:
+  poteriashki_db:
     image: postgres:14
     container_name: poteriashki_db
     restart: always
@@ -23,3 +13,13 @@ services:
       PG_DATA: /var/lib/postgresql/data
     volumes:
       - ./.data/db:/var/lib/postgresql/data
+
+  poteriashki:
+    build:
+      context: .
+    depends_on:
+      - postgres
+    container_name: poteriashki
+    env_file:
+      - .env
+    restart: unless-stopped
