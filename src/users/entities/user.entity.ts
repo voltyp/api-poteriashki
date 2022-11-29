@@ -5,9 +5,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { RoleEnum, StatusUserEnum } from '@/users/types/user.type';
+import { SphereAttributesGuide } from '@/sphere-attributes-guide/entities/sphere-attributes-guide.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -63,6 +65,9 @@ export class UserEntity {
     nullable: false,
   })
   status: StatusUserEnum;
+
+  @OneToMany(() => SphereAttributesGuide, (guide) => guide.user)
+  sphereAttributes: SphereAttributesGuide[];
 
   @CreateDateColumn()
   createdDate: Date;

@@ -7,6 +7,7 @@ import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import { AnimalsModule } from './animals/animals.module';
+import { SphereAttributesGuideModule } from './sphere-attributes-guide/sphere-attributes-guide.module';
 import databaseConfig from './database/db.config';
 
 @Module({
@@ -24,6 +25,7 @@ import databaseConfig from './database/db.config';
     }),
     UserModule,
     AnimalsModule,
+    SphereAttributesGuideModule,
   ],
   controllers: [AppController],
   providers: [AppService],
