@@ -15,13 +15,13 @@ import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 export class TypeAnimalGuideService {
   constructor(
     @InjectRepository(TypeAnimalEntity)
-    private readonly TypeRepository: Repository<TypeAnimalEntity>,
+    private readonly typeRepository: Repository<TypeAnimalEntity>,
   ) {}
 
   async createType(data: CreateTypeAnimalDto): Promise<TypeAnimalEntity> {
     try {
-      const value = this.TypeRepository.create(data);
-      await this.TypeRepository.save(value);
+      const value = this.typeRepository.create(data);
+      await this.typeRepository.save(value);
 
       return value;
     } catch (error) {
@@ -34,24 +34,24 @@ export class TypeAnimalGuideService {
   }
 
   async getTypeList(): Promise<TypeAnimalEntity[]> {
-    return this.TypeRepository.find();
+    return this.typeRepository.find();
   }
 
   async updateType({
     id,
     value,
   }: UpdateTypeAnimalDto): Promise<TypeAnimalEntity> {
-    await this.TypeRepository.update(id, { value });
-    return this.TypeRepository.findOneBy({ id });
+    await this.typeRepository.update(id, { value });
+    return this.typeRepository.findOneBy({ id });
   }
 
   async removeType(id: number): Promise<void> {
-    const animalType = await this.TypeRepository.findOneBy({ id });
+    const animalType = await this.typeRepository.findOneBy({ id });
 
     if (!animalType) {
       throw new NotFoundException('Вид животного не найден.');
     }
 
-    await this.TypeRepository.remove(animalType);
+    await this.typeRepository.remove(animalType);
   }
 }

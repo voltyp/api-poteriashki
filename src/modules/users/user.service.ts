@@ -11,35 +11,35 @@ export class UserService {
   constructor(
     private readonly configService: ConfigService,
     @InjectRepository(UserEntity)
-    private readonly UserRepository: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async getUser(id: number) {
-    return await this.UserRepository.findOneBy({ id });
+    return await this.userRepository.findOneBy({ id });
   }
 
   async getAllUsers() {
-    return await this.UserRepository.find();
+    return await this.userRepository.find();
   }
 
   async createUser(data: UserCreateDto) {
-    const user = this.UserRepository.create(data);
-    await this.UserRepository.save(user);
+    const user = this.userRepository.create(data);
+    await this.userRepository.save(user);
     return user;
   }
 
   async updateUser(id: number, data: UserUpdateDto) {
-    await this.UserRepository.update(id, data);
-    return await this.UserRepository.findOneBy({ id });
+    await this.userRepository.update(id, data);
+    return await this.userRepository.findOneBy({ id });
   }
 
   async removeUser(id: number) {
-    const user = await this.UserRepository.findOneBy({ id });
+    const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException('Пользователь не найден.');
     }
 
-    await this.UserRepository.remove(user);
+    await this.userRepository.remove(user);
   }
 }

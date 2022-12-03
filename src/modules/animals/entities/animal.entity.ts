@@ -16,14 +16,14 @@ import { UserEntity } from '@/modules/users/entities/user.entity';
 
 @Entity({ name: 'animal' })
 export class AnimalEntity extends BaseEntity {
-  @ApiProperty({ example: 'НК', description: 'НК - Новый Кот' })
+  @ApiProperty({ description: 'НК - Новый Кот' })
   @Column({
     type: 'enum',
     enum: CategoryCode,
   })
   categoryCode: CategoryCode;
 
-  @ApiProperty({ example: 'нк-10-2022', description: 'typeAnimal-id-year' })
+  @ApiProperty({ description: 'typeAnimal-id-year' })
   @Column()
   userCode: string;
 
@@ -31,17 +31,17 @@ export class AnimalEntity extends BaseEntity {
   @Column({ default: false })
   isSpayed: boolean;
 
-  @ApiProperty({ example: 1, description: 'id типа животного' })
+  @ApiProperty({ description: 'id типа животного' })
   @ManyToOne(() => TypeAnimalEntity, (type) => type.animals, {
     eager: true,
   })
   typeAnimal: TypeAnimalEntity;
 
-  @ApiProperty({ example: 'Мурзик', description: 'Имя животного' })
+  @ApiProperty({ description: 'Имя животного' })
   @Column({ nullable: false })
   name: string;
 
-  @ApiProperty({ example: 1, description: 'Пол животного' })
+  @ApiProperty({ description: 'Пол животного' })
   @Column({
     type: 'enum',
     enum: SexType,
@@ -55,25 +55,25 @@ export class AnimalEntity extends BaseEntity {
   @Column({ nullable: false })
   birthdate: Date;
 
-  @ApiProperty({ example: 1, description: 'id породы животного' })
+  @ApiProperty({ description: 'id породы животного' })
   @ManyToOne(() => BreedEntity, (breed) => breed.animals, {
     eager: true,
   })
   breed: BreedEntity;
 
-  @ApiProperty({ example: 1, description: 'id типа шерсти животного' })
+  @ApiProperty({ description: 'id типа шерсти животного' })
   @ManyToOne(() => FurEntity, (fur) => fur.animals, {
     eager: true,
   })
   fur: FurEntity;
 
-  @ApiProperty({ example: 1, description: 'id цвета окраса животного' })
+  @ApiProperty({ description: 'id цвета окраса животного' })
   @ManyToOne(() => ColorEntity, (color) => color.animals, {
     eager: true,
   })
   color: ColorEntity;
 
-  @ApiProperty({ example: 1, description: 'Статус животного' })
+  @ApiProperty({ description: 'Статус животного' })
   @Column({
     type: 'enum',
     enum: AnimalStatus,
@@ -81,8 +81,31 @@ export class AnimalEntity extends BaseEntity {
   })
   status: AnimalStatus;
 
+  @ApiProperty({ description: 'Место находки' })
+  @Column({ nullable: true })
+  placeDiscovery: string;
+
+  @ApiProperty({ description: 'Дата находки' })
+  @Column({ nullable: true })
+  dateDiscovery: string;
+
+  @ApiProperty({ description: 'Особые приметы' })
+  @Column({ nullable: true })
+  specialFeatures: string | null;
+
+  @ApiProperty({ description: 'Дополнительная информация' })
+  @Column({ nullable: true })
+  furtherInformation: string;
+
+  @ApiProperty({ description: 'Нужна передержка?' })
+  @Column({
+    default: false,
+  })
+  isOverexposure: boolean;
+
   @ManyToOne(() => UserEntity, (user) => user.animals, {
     eager: true,
+    nullable: true,
   })
   curator: UserEntity;
 }

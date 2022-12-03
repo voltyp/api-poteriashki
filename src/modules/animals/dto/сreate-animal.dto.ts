@@ -65,10 +65,36 @@ export class CreateAnimalDto {
   @IsEnum(AnimalStatus)
   readonly status: AnimalStatus;
 
+  @ApiProperty({ example: 'Ленина 1', description: 'Адрес где нашли' })
+  readonly placeDiscovery: string | null;
+
+  @ApiProperty({
+    example: '2022-11-26T19:03:48.663Z',
+    description: 'Дата находки',
+  })
+  readonly dateDiscovery: string | null;
+
+  @ApiProperty({
+    example: 'Черный хвост, белый нос',
+    description: 'Особые приметы',
+  })
+  readonly specialFeatures: string | null;
+
+  @ApiProperty({
+    example: 'Любая доп информация',
+    description: 'дополнительная информация',
+  })
+  readonly furtherInformation: string | null;
+
+  @ApiProperty({
+    example: false,
+    description: 'Нужна ли передержка?',
+  })
+  readonly isOverexposure: boolean;
+
   @ApiProperty({
     example: 1,
     description: 'id ответственного волонтера за животное',
   })
-  @IsNotEmpty()
-  readonly curator: UserEntity;
+  readonly curator: UserEntity | null;
 }

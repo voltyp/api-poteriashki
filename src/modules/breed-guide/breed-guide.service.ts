@@ -16,13 +16,13 @@ import { UpdateTypeAnimalDto } from '@/modules/type-animal-guide/dto';
 export class BreedGuideService {
   constructor(
     @InjectRepository(BreedEntity)
-    private readonly BreedRepository: Repository<BreedEntity>,
+    private readonly breedRepository: Repository<BreedEntity>,
   ) {}
 
   async createBreed(data: CreateBreedDto): Promise<BreedEntity> {
     try {
-      const breed = this.BreedRepository.create(data);
-      await this.BreedRepository.save(breed);
+      const breed = this.breedRepository.create(data);
+      await this.breedRepository.save(breed);
 
       return breed;
     } catch (error) {
@@ -35,7 +35,7 @@ export class BreedGuideService {
   }
 
   async getListBreed(): Promise<BreedEntity[]> {
-    return this.BreedRepository.find({
+    return this.breedRepository.find({
       relations: {
         typeAnimal: true,
       },
@@ -43,17 +43,17 @@ export class BreedGuideService {
   }
 
   async updateBreed({ id, value }: UpdateTypeAnimalDto): Promise<BreedEntity> {
-    await this.BreedRepository.update(id, { value });
-    return this.BreedRepository.findOneBy({ id });
+    await this.breedRepository.update(id, { value });
+    return this.breedRepository.findOneBy({ id });
   }
 
   async removeBreed(id: number): Promise<void> {
-    const breed = await this.BreedRepository.findOneBy({ id });
+    const breed = await this.breedRepository.findOneBy({ id });
 
     if (!breed) {
       throw new NotFoundException('Порода не найдена.');
     }
 
-    await this.BreedRepository.remove(breed);
+    await this.breedRepository.remove(breed);
   }
 }
