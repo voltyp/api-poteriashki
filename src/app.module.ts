@@ -5,12 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { DataSource } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
-import { AnimalsModule } from './animals/animals.module';
-import { FurGuideModule } from './fur-guide/fur-guide.module';
-import { BreedGuideModule } from './breed-guide/breed-guide.module';
-import { TypeAnimalGuideModule } from './type-animal-guide/type-animal-guide.module';
-import { ColorGuideModule } from './color-guide/color-guide.module';
+import { UserModule } from './modules/users/user.module';
+import { AnimalsModule } from './modules/animals/animals.module';
+import { FurGuideModule } from './modules/fur-guide/fur-guide.module';
+import { BreedGuideModule } from './modules/breed-guide/breed-guide.module';
+import { TypeAnimalGuideModule } from './modules/type-animal-guide/type-animal-guide.module';
+import { ColorGuideModule } from './modules/color-guide/color-guide.module';
 import databaseConfig from './database/db.config';
 
 @Module({
