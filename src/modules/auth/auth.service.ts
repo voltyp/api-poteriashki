@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as argon from 'argon2';
 import jwt_decode from 'jwt-decode';
 
 import { LoginDto } from './dto/login.dto';
@@ -54,7 +54,7 @@ export class AuthService {
   }
 
   async updateRefreshTokenHash(userId: number, refreshToken: string) {
-    const hash = await bcrypt.hash(refreshToken, 10);
+    const hash = await argon.hash(refreshToken);
     await this.userRepository.update(userId, { hashedRt: hash });
   }
 
@@ -67,9 +67,9 @@ export class AuthService {
       throw new ForbiddenException('Доступ запрещен');
     }
 
-    const refreshTokenMatches = await bcrypt.compare(
-      refreshToken,
+    const refreshTokenMatches = await argon.verify(
       user.hashedRt.toString(),
+      refreshToken,
     );
 
     if (!refreshTokenMatches) {
@@ -91,9 +91,9 @@ export class AuthService {
       );
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
+    const isPasswordCorrect = await argon.verify(
       user.password.toString(),
+      password,
     );
 
     if (!isPasswordCorrect) {
@@ -107,5 +107,10 @@ export class AuthService {
     await this.updateRefreshTokenHash(user.id, tokens.refreshToken);
 
     return { user, tokens };
+  }
+
+  async logout(userId: number): Promise<boolean> {
+    await this.userRepository.update(userId, { hashedRt: null });
+    return true;
   }
 }

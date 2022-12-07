@@ -1,6 +1,6 @@
 import { Entity, Column, Index, OneToMany, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { hash, genSaltSync } from 'bcrypt';
+import * as argon from 'argon2';
 
 import { BaseEntity } from '@/common/entities/base.entity';
 import { RoleEnum, StatusUserEnum } from '../types/user.type';
@@ -38,7 +38,7 @@ export class UserEntity extends BaseEntity {
   })
   lastLogin?: Date;
 
-  @Column({ type: 'bytea', nullable: true })
+  @Column({ type: 'text', nullable: true })
   @Exclude()
   hashedRt?: string;
 
@@ -64,8 +64,7 @@ export class UserEntity extends BaseEntity {
   @BeforeInsert()
   async hashPassword() {
     if (this.password) {
-      const salt = genSaltSync();
-      this.password = await hash(this.password, salt);
+      this.password = await argon.hash(this.password);
     }
   }
 }

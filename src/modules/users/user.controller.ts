@@ -18,11 +18,14 @@ import {
 
 import { UserService } from './user.service';
 import { UserCreateDto, UserUpdateDto } from './dto';
+import { Public } from '@/common/decorators';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(readonly userService: UserService) {}
+
+  @Public() // TODO: Временно, потом удалить
   @Post()
   @ApiCreatedResponse({ description: 'Пользователь успешно создан.' })
   @ApiUnprocessableEntityResponse({
