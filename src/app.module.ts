@@ -11,7 +11,10 @@ import { FurGuideModule } from './modules/fur-guide/fur-guide.module';
 import { BreedGuideModule } from './modules/breed-guide/breed-guide.module';
 import { TypeAnimalGuideModule } from './modules/type-animal-guide/type-animal-guide.module';
 import { ColorGuideModule } from './modules/color-guide/color-guide.module';
+import { AuthModule } from './modules/auth/auth.module';
 import databaseConfig from './database/db.config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '@/common/guards';
 
 @Module({
   imports: [
@@ -32,8 +35,15 @@ import databaseConfig from './database/db.config';
     BreedGuideModule,
     TypeAnimalGuideModule,
     ColorGuideModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

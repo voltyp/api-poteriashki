@@ -1,7 +1,9 @@
-import { Entity, Column, Index, OneToMany } from 'typeorm';
+import { Entity, Column, Index, OneToMany, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { RoleEnum, StatusUserEnum } from '@/modules/users/types/user.type';
+import * as argon from 'argon2';
+
 import { BaseEntity } from '@/common/entities/base.entity';
+import { RoleEnum, StatusUserEnum } from '../types/user.type';
 import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
 
 @Entity({ name: 'users' })
@@ -23,9 +25,9 @@ export class UserEntity extends BaseEntity {
   @Column({ unique: true, nullable: true })
   phone: string;
 
-  @Column({ type: 'bytea', nullable: true })
-  @Exclude()
-  password?: Buffer;
+  @Exclude({ toPlainOnly: true })
+  @Column({ nullable: true })
+  password: string;
 
   @Column({ nullable: true })
   birthDate: Date;
@@ -36,9 +38,9 @@ export class UserEntity extends BaseEntity {
   })
   lastLogin?: Date;
 
-  @Column({ type: 'bytea', nullable: true })
+  @Column({ type: 'text', nullable: true })
   @Exclude()
-  hashedRt?: Buffer;
+  hashedRt?: string;
 
   @Column({
     type: 'enum',
@@ -58,4 +60,11 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => AnimalEntity, (animal) => animal.curator)
   animals: AnimalEntity[];
+
+  @BeforeInsert()
+  async hashPassword() {
+    if (this.password) {
+      this.password = await argon.hash(this.password);
+    }
+  }
 }

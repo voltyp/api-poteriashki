@@ -6,8 +6,6 @@ import {
   Delete,
   ParseIntPipe,
   Get,
-  ClassSerializerInterceptor,
-  UseInterceptors,
   Patch,
 } from '@nestjs/common';
 import {
@@ -20,36 +18,34 @@ import {
 
 import { UserService } from './user.service';
 import { UserCreateDto, UserUpdateDto } from './dto';
+import { Public } from '@/common/decorators';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(readonly userService: UserService) {}
 
+  @Public() // TODO: Временно, потом удалить
   @Post()
   @ApiCreatedResponse({ description: 'Пользователь успешно создан.' })
   @ApiUnprocessableEntityResponse({
     description: 'Такой пользователь уже существует.',
   })
-  @UseInterceptors(ClassSerializerInterceptor)
   async createUser(@Body() data: UserCreateDto) {
     return this.userService.createUser(data);
   }
 
   @Get(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
   async getUser(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getUser(id);
   }
 
   @Get()
-  @UseInterceptors(ClassSerializerInterceptor)
   async getAllUsers() {
     return this.userService.getAllUsers();
   }
 
   @Patch(':id')
-  @UseInterceptors(ClassSerializerInterceptor)
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UserUpdateDto,
