@@ -1,6 +1,7 @@
 FROM node:lts-alpine
 
 RUN apk update && apk add bash && apk add --no-cache coreutils
+RUN npm i -g @nestjs/cli typescript ts-node env-cmd
 
 COPY package*.json /tmp/app/
 RUN cd /tmp/app && npm install
