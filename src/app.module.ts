@@ -15,6 +15,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import databaseConfig from './database/db.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@/common/guards';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -28,6 +30,9 @@ import { JwtAuthGuard } from '@/common/guards';
       dataSourceFactory: async (options) => {
         return await new DataSource(options).initialize();
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
     }),
     UserModule,
     AnimalsModule,
