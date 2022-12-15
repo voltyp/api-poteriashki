@@ -32,15 +32,12 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   birthDate: Date;
 
-  @Column({
-    type: 'timestamptz',
-    nullable: true,
-  })
-  lastLogin?: Date;
+  @Column({ nullable: true })
+  userPhoto: string;
 
   @Column({ type: 'text', nullable: true })
   @Exclude()
-  hashedRt?: string;
+  hashedRt: string;
 
   @Column({
     type: 'enum',
