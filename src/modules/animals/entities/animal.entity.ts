@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 import {
@@ -13,6 +13,7 @@ import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
+import { AnimalPhotoEntity } from '@/modules/animals/entities/animal-photo.entity';
 
 @Entity({ name: 'animal' })
 export class AnimalEntity extends BaseEntity {
@@ -102,6 +103,13 @@ export class AnimalEntity extends BaseEntity {
     default: false,
   })
   isOverexposure: boolean;
+
+  @ApiProperty({ description: 'Фотографии животного' })
+  @OneToMany(() => AnimalPhotoEntity, (photo) => photo.animal, {
+    eager: true,
+    nullable: true,
+  })
+  photos: AnimalPhotoEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.animals, {
     eager: true,

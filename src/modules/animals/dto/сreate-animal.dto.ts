@@ -93,6 +93,13 @@ export class CreateAnimalDto {
   readonly isOverexposure: boolean;
 
   @ApiProperty({
+    description: 'Фотографии животного',
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+  })
+  readonly photos: any[];
+
+  @ApiProperty({
     example: 1,
     description: 'id ответственного волонтера за животное',
   })

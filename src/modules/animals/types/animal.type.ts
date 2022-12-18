@@ -1,11 +1,11 @@
 export enum AnimalStatus {
-  FindingOwner,
-  Lost,
-  OwnerFound,
-  Quarantine,
-  Check,
-  RainbowRoad,
-  Deleted,
+  FindingOwner = 'Ищет хозяина',
+  Lost = 'Потерян',
+  OwnerFound = 'Хозяин найден',
+  Quarantine = 'На карантине',
+  Check = 'На проверке',
+  RainbowRoad = 'В путь по радуге',
+  Deleted = 'Удален',
 }
 
 export enum CategoryCode {
@@ -14,6 +14,6 @@ export enum CategoryCode {
 }
 
 export enum SexType {
-  Male,
-  Female,
+  Male = 'Мальчик',
+  Female = 'Девочка',
 }
