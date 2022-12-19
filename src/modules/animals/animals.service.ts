@@ -10,6 +10,8 @@ import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
 import { CreateAnimalDto } from '@/modules/animals/dto/сreate-animal.dto';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 import { getUserCode } from '@/common/utils';
+import { AnimalPhotoEntity } from '@/modules/animals/entities/animal-photo.entity';
+import { changePath } from '@/common/file-utilities';
 
 @Injectable()
 export class AnimalsService {
@@ -17,15 +19,29 @@ export class AnimalsService {
     private readonly configService: ConfigService,
     @InjectRepository(AnimalEntity)
     private readonly animalsRepository: Repository<AnimalEntity>,
+    @InjectRepository(AnimalPhotoEntity)
+    private readonly animalPhotoRepository: Repository<AnimalPhotoEntity>,
   ) {}
 
   async createAnimal(data: CreateAnimalDto): Promise<AnimalEntity> {
-    const animal = new AnimalEntity();
-    Object.assign(animal, data);
-    animal.userCode = getUserCode(animal.categoryCode, animal.id);
+    const { photos } = data;
+
     try {
-      // const animal = this.animalsRepository.create(data);
+      const animal = new AnimalEntity();
+
+      Object.assign(animal, data);
+      animal.userCode = getUserCode(animal.categoryCode, animal.id);
+
       await this.animalsRepository.save(animal);
+
+      for (const file of photos) {
+        const photo = new AnimalPhotoEntity();
+        photo.path = changePath(file);
+        photo.originalName = file.originalname;
+        photo.animal = animal;
+        await this.animalPhotoRepository.save(photo);
+      }
+
       return animal;
     } catch (error) {
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {

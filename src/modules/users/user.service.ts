@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 
 import { UserCreateDto, UserUpdateDto } from './dto';
 import { UserEntity } from './entities/user.entity';
-import { removeFile } from '@/common/file-utilities';
+import { changePath, removeFile } from '@/common/file-utilities';
 
 @Injectable()
 export class UserService {
@@ -72,8 +72,7 @@ export class UserService {
       throw new NotFoundException('Пользователь не найден.');
     }
 
-    const photoPath = file.path.replace('static/', '');
-    await this.userRepository.update(id, { userPhoto: photoPath });
+    await this.userRepository.update(id, { userPhoto: changePath(file) });
   }
 
   async removeUserPhoto(id: number) {
