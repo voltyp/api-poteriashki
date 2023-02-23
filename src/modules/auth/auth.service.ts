@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import * as argon from 'argon2';
 import jwt_decode from 'jwt-decode';
+import { Request, Response } from 'express';
 
 import { LoginDto } from './dto/login.dto';
 import { UserEntity } from '@/modules/users/entities/user.entity';
@@ -32,7 +33,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get('JWT_SECRET'),
-          expiresIn: 60 * 15,
+          expiresIn: 60,
         },
       ),
       this.jwtService.signAsync(
@@ -58,8 +59,22 @@ export class AuthService {
     await this.userRepository.update(userId, { hashedRt: hash });
   }
 
-  async refreshToken(refreshToken: string): Promise<any> {
-    const { userId: id }: JwtPayload = jwt_decode(refreshToken);
+  storeTokenInCookie(
+    res: Response,
+    authToken: { accessToken: string; refreshToken: string },
+  ) {
+    res.cookie('access_token', authToken.accessToken, {
+      maxAge: 1000 * 60 * 15,
+      httpOnly: true,
+    });
+    res.cookie('refresh_token', authToken.refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
+  }
+
+  async refreshToken(req: Request): Promise<Tokens> {
+    const { userId: id }: JwtPayload = jwt_decode(req.cookies.refresh_token);
 
     const user = await this.userRepository.findOneBy({ id });
 
@@ -69,7 +84,7 @@ export class AuthService {
 
     const refreshTokenMatches = await argon.verify(
       user.hashedRt.toString(),
-      refreshToken,
+      req.cookies.refresh_token,
     );
 
     if (!refreshTokenMatches) {
