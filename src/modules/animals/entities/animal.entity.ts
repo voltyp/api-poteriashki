@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   AnimalStatus,
   CategoryCode,
-  SexType,
+  Gender,
 } from '@/modules/animals/types/animal.type';
 
 import { TypeAnimalEntity } from '@/modules/type-animal-guide/entities/type-animal.entity';
@@ -45,9 +45,9 @@ export class AnimalEntity extends BaseEntity {
   @ApiProperty({ description: 'Пол животного' })
   @Column({
     type: 'enum',
-    enum: SexType,
+    enum: Gender,
   })
-  sex: SexType;
+  gender: Gender;
 
   @ApiProperty({
     example: '2022-12-02T21:39:29.133Z',

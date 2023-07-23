@@ -10,7 +10,7 @@ export const editUserFileName = (req, file, callback) => {
 };
 export const editAnimalFileName = (req, file, callback) => {
   const fileExtName = extname(file.originalname);
-  callback(null, `${randomStringGenerator()}${fileExtName}`);
+  callback(null, `${file.fieldname}-${randomStringGenerator()}${fileExtName}`);
 };
 
 export const removeFile = (path: string) => {

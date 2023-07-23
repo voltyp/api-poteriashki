@@ -5,7 +5,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, {
+    cors: { credentials: true, origin: 'http://localhost:5173' },
+  });
 
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());

@@ -21,7 +21,9 @@ export class AnimalPhotoEntity {
   @Column()
   originalName: string;
 
-  @ManyToOne(() => AnimalEntity, (animal) => animal.photos)
+  @ManyToOne(() => AnimalEntity, (animal) => animal.photos, {
+    onDelete: 'CASCADE',
+  })
   animal: AnimalEntity;
 
   @CreateDateColumn()
