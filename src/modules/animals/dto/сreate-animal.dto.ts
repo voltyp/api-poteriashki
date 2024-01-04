@@ -5,7 +5,7 @@ import {
   CategoryCode,
   Gender,
 } from '@/modules/animals/types/animal.type';
-import { TypeAnimalEntity } from '@/modules/type-animal-guide/entities/type-animal.entity';
+import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
@@ -25,13 +25,13 @@ export class CreateAnimalDto {
 
   @ApiProperty({
     example: '10НК-2022',
-    description: 'uniqNum-typeAnimal-year',
+    description: 'uniqNum-species-year',
   })
   readonly userCode: string;
 
   @ApiProperty({ example: 1, description: 'id вида животного' })
   @IsNotEmpty()
-  readonly typeAnimal: TypeAnimalEntity;
+  readonly species: SpeciesEntity;
 
   @ApiProperty({ example: 'Мурзик', description: 'Кличка животного' })
   @IsNotEmpty()
@@ -78,7 +78,7 @@ export class CreateAnimalDto {
     example: '2022-11-26T19:03:48.663Z',
     description: 'Дата находки',
   })
-  readonly dateDiscovery?: string;
+  readonly foundDate?: string;
 
   @ApiProperty({
     example: 'Черный хвост, белый нос',
@@ -96,7 +96,7 @@ export class CreateAnimalDto {
     example: false,
     description: 'Нужна ли передержка?',
   })
-  readonly isOverexposure: boolean;
+  readonly isNeedFoster: boolean;
 
   @ApiProperty({
     description: 'Фотография животного',

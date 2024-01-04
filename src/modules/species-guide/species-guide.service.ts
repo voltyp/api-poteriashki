@@ -7,18 +7,18 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateTypeAnimalDto, UpdateTypeAnimalDto } from './dto';
-import { TypeAnimalEntity } from './entities/type-animal.entity';
+import { CreateSpeciesDto, UpdateSpeciesDto } from './dto';
+import { SpeciesEntity } from './entities/species.entity';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 
 @Injectable()
-export class TypeAnimalGuideService {
+export class SpeciesGuideService {
   constructor(
-    @InjectRepository(TypeAnimalEntity)
-    private readonly typeRepository: Repository<TypeAnimalEntity>,
+    @InjectRepository(SpeciesEntity)
+    private readonly typeRepository: Repository<SpeciesEntity>,
   ) {}
 
-  async createType(data: CreateTypeAnimalDto): Promise<TypeAnimalEntity> {
+  async createSpecies(data: CreateSpeciesDto): Promise<SpeciesEntity> {
     try {
       const value = this.typeRepository.create(data);
       await this.typeRepository.save(value);
@@ -33,19 +33,16 @@ export class TypeAnimalGuideService {
     }
   }
 
-  async getTypeList(): Promise<TypeAnimalEntity[]> {
+  async getSpeciesList(): Promise<SpeciesEntity[]> {
     return this.typeRepository.find();
   }
 
-  async updateType({
-    id,
-    value,
-  }: UpdateTypeAnimalDto): Promise<TypeAnimalEntity> {
+  async updateSpecies({ id, value }: UpdateSpeciesDto): Promise<SpeciesEntity> {
     await this.typeRepository.update(id, { value });
     return this.typeRepository.findOneBy({ id });
   }
 
-  async removeType(id: number): Promise<void> {
+  async removeSpecies(id: number): Promise<void> {
     const animalType = await this.typeRepository.findOneBy({ id });
 
     if (!animalType) {

@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateBreedDto } from './dto';
 import { BreedEntity } from './entities/breed.entity';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
-import { UpdateTypeAnimalDto } from '@/modules/type-animal-guide/dto';
+import { UpdateSpeciesDto } from '@/modules/species-guide/dto';
 
 @Injectable()
 export class BreedGuideService {
@@ -37,12 +37,12 @@ export class BreedGuideService {
   async getListBreed(): Promise<BreedEntity[]> {
     return this.breedRepository.find({
       relations: {
-        typeAnimal: true,
+        species: true,
       },
     });
   }
 
-  async updateBreed({ id, value }: UpdateTypeAnimalDto): Promise<BreedEntity> {
+  async updateBreed({ id, value }: UpdateSpeciesDto): Promise<BreedEntity> {
     await this.breedRepository.update(id, { value });
     return this.breedRepository.findOneBy({ id });
   }

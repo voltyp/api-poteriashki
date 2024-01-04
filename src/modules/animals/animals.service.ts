@@ -45,7 +45,6 @@ export class AnimalsService {
   }
 
   async createAnimal(data: any): Promise<AnimalEntity> {
-    console.log('data', data);
     const { photos } = data;
 
     try {

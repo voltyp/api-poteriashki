@@ -9,7 +9,7 @@ import { UserModule } from './modules/users/user.module';
 import { AnimalsModule } from './modules/animals/animals.module';
 import { FurGuideModule } from './modules/fur-guide/fur-guide.module';
 import { BreedGuideModule } from './modules/breed-guide/breed-guide.module';
-import { TypeAnimalGuideModule } from './modules/type-animal-guide/type-animal-guide.module';
+import { SpeciesGuideModule } from '@/modules/species-guide/species-guide.module';
 import { ColorGuideModule } from './modules/color-guide/color-guide.module';
 import { AuthModule } from './modules/auth/auth.module';
 import databaseConfig from './database/db.config';
@@ -38,7 +38,7 @@ import { join } from 'path';
     AnimalsModule,
     FurGuideModule,
     BreedGuideModule,
-    TypeAnimalGuideModule,
+    SpeciesGuideModule,
     ColorGuideModule,
     AuthModule,
   ],

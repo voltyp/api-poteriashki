@@ -5,14 +5,17 @@ import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
 
 @Entity({ name: 'type_animal' })
-export class TypeAnimalEntity extends BaseEntity {
+export class SpeciesEntity extends BaseEntity {
   @Transform(({ value }) => value.toLowerCase())
   @Column({ unique: true })
   value: string;
 
-  @OneToMany(() => AnimalEntity, (animal) => animal.typeAnimal)
+  @Column({ unique: true })
+  code: string;
+
+  @OneToMany(() => AnimalEntity, (animal) => animal.species)
   animals: AnimalEntity[];
 
-  @OneToMany(() => BreedEntity, (breed) => breed.typeAnimal)
+  @OneToMany(() => BreedEntity, (breed) => breed.species)
   breeds: BreedEntity[];
 }

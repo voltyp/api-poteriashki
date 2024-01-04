@@ -7,7 +7,7 @@ import {
   Gender,
 } from '@/modules/animals/types/animal.type';
 
-import { TypeAnimalEntity } from '@/modules/type-animal-guide/entities/type-animal.entity';
+import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
@@ -24,7 +24,7 @@ export class AnimalEntity extends BaseEntity {
   })
   categoryCode: CategoryCode;
 
-  @ApiProperty({ description: 'typeAnimal-id-year' })
+  @ApiProperty({ description: 'species-id-year' })
   @Column()
   userCode: string;
 
@@ -33,10 +33,10 @@ export class AnimalEntity extends BaseEntity {
   isSpayed: boolean;
 
   @ApiProperty({ description: 'id типа животного' })
-  @ManyToOne(() => TypeAnimalEntity, (type) => type.animals, {
+  @ManyToOne(() => SpeciesEntity, (type) => type.animals, {
     eager: true,
   })
-  typeAnimal: TypeAnimalEntity;
+  species: SpeciesEntity;
 
   @ApiProperty({ description: 'Имя животного' })
   @Column({ nullable: false })
@@ -88,7 +88,7 @@ export class AnimalEntity extends BaseEntity {
 
   @ApiProperty({ description: 'Дата находки' })
   @Column({ nullable: true })
-  dateDiscovery: string;
+  foundDate: string;
 
   @ApiProperty({ description: 'Особые приметы' })
   @Column({ nullable: true })
@@ -102,7 +102,7 @@ export class AnimalEntity extends BaseEntity {
   @Column({
     default: false,
   })
-  isOverexposure: boolean;
+  isNeedFoster: boolean;
 
   @ApiProperty({ description: 'Фотографии животного' })
   @OneToMany(() => AnimalPhotoEntity, (photo) => photo.animal, {

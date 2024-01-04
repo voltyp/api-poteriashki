@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { TypeAnimalEntity } from '@/modules/type-animal-guide/entities/type-animal.entity';
+import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 
 export class CreateBreedDto {
   @Transform(({ value }) => value.toLowerCase())
@@ -11,5 +11,5 @@ export class CreateBreedDto {
 
   @ApiProperty({ description: 'id вида животного' })
   @IsNotEmpty()
-  readonly typeAnimal: TypeAnimalEntity;
+  readonly species: SpeciesEntity;
 }

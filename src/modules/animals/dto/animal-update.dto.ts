@@ -43,7 +43,7 @@ export class AnimalUpdateDto {
     example: '2022-11-26T19:03:48.663Z',
     description: 'Дата находки',
   })
-  readonly dateDiscovery?: string;
+  readonly foundDate?: string;
 
   @ApiProperty({
     example: 'Черный хвост, белый нос',
@@ -61,7 +61,7 @@ export class AnimalUpdateDto {
     example: false,
     description: 'Нужна ли передержка?',
   })
-  readonly isOverexposure: boolean;
+  readonly isNeedFoster: boolean;
 
   @ApiProperty({
     description: 'Фотографии животного',

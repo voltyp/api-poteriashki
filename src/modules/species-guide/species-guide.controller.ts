@@ -17,40 +17,36 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { TypeAnimalGuideService } from './type-animal-guide.service';
+import { SpeciesGuideService } from './species-guide.service';
 import {
-  CreateTypeAnimalDto,
-  UpdateTypeAnimalDto,
-} from '@/modules/type-animal-guide/dto';
-import { TypeAnimalEntity } from '@/modules/type-animal-guide/entities/type-animal.entity';
+  CreateSpeciesDto,
+  UpdateSpeciesDto,
+} from '@/modules/species-guide/dto';
+import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 
-@ApiTags('Type-animal-guide')
-@Controller('type-animal-guide')
-export class TypeAnimalGuideController {
-  constructor(readonly typeAnimalsService: TypeAnimalGuideService) {}
+@ApiTags('species-guide')
+@Controller('species-guide')
+export class SpeciesGuideController {
+  constructor(readonly speciesService: SpeciesGuideService) {}
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Добавление вида животного' })
-  async createType(
-    @Body() data: CreateTypeAnimalDto,
-  ): Promise<TypeAnimalEntity> {
-    return this.typeAnimalsService.createType(data);
+  async createType(@Body() data: CreateSpeciesDto): Promise<SpeciesEntity> {
+    return this.speciesService.createSpecies(data);
   }
 
   @Get()
   @ApiOperation({ summary: 'Получение списка видов животных' })
-  async getTypeList(): Promise<TypeAnimalEntity[]> {
-    return this.typeAnimalsService.getTypeList();
+  async getTypeList(): Promise<SpeciesEntity[]> {
+    return this.speciesService.getSpeciesList();
   }
 
   @Patch()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление вида' })
-  async updateType(
-    @Body() data: UpdateTypeAnimalDto,
-  ): Promise<TypeAnimalEntity> {
-    return this.typeAnimalsService.updateType(data);
+  async updateType(@Body() data: UpdateSpeciesDto): Promise<SpeciesEntity> {
+    return this.speciesService.updateSpecies(data);
   }
 
   @Delete(':id')
@@ -58,6 +54,6 @@ export class TypeAnimalGuideController {
   @ApiOkResponse({ description: 'Вид успешно удален.' })
   @ApiNotFoundResponse({ description: 'Вид не найден.' })
   async removeType(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.typeAnimalsService.removeType(id);
+    return this.speciesService.removeSpecies(id);
   }
 }
