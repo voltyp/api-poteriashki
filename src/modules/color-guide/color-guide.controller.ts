@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -39,18 +38,21 @@ export class ColorGuideController {
     return this.colorService.getColorList();
   }
 
-  @Patch()
+  @Patch(':code')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление окраса животного' })
-  async updateColor(@Body() data: UpdateColorDto): Promise<ColorEntity> {
-    return this.colorService.updateColor(data);
+  async updateColor(
+    @Param('code') code: string,
+    @Body() data: UpdateColorDto,
+  ): Promise<ColorEntity> {
+    return this.colorService.updateColor(code, data);
   }
 
-  @Delete(':id')
+  @Delete(':code')
   @ApiOperation({ summary: 'Удаление окраса' })
   @ApiOkResponse({ description: 'Окрас успешно удален.' })
   @ApiNotFoundResponse({ description: 'Окрас не найден.' })
-  async removeColor(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.colorService.removeColor(id);
+  async removeColor(@Param('code') code: string): Promise<void> {
+    return this.colorService.removeColor(code);
   }
 }

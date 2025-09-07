@@ -13,23 +13,38 @@ export class ColorGuideService {
   ) {}
 
   async createColor(data: CreateColorDto): Promise<ColorEntity> {
-    const value = this.colorRepository.create(data);
-    await this.colorRepository.save(value);
+    const color = this.colorRepository.create({
+      code: data.code,
+      name: data.name,
+      description: data.description,
+    });
 
-    return value;
+    await this.colorRepository.save(color);
+
+    return color;
   }
 
   async getColorList(): Promise<ColorEntity[]> {
     return this.colorRepository.find();
   }
 
-  async updateColor({ id, value }: UpdateColorDto): Promise<ColorEntity> {
-    await this.colorRepository.update(id, { value });
-    return this.colorRepository.findOneBy({ id });
+  async updateColor(
+    code: string,
+    { name, description }: UpdateColorDto,
+  ): Promise<ColorEntity> {
+    const color = await this.colorRepository.findOne({ where: { code } });
+
+    if (!color) {
+      throw new NotFoundException('Окрас не найден.');
+    }
+
+    await this.colorRepository.update(color.id, { name, description });
+
+    return this.colorRepository.findOneBy({ id: color.id });
   }
 
-  async removeColor(id: number): Promise<void> {
-    const color = await this.colorRepository.findOneBy({ id });
+  async removeColor(code: string): Promise<void> {
+    const color = await this.colorRepository.findOne({ where: { code } });
 
     if (!color) {
       throw new NotFoundException('Окрас не найден.');

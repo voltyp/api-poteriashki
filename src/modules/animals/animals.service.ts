@@ -181,9 +181,6 @@ export class AnimalsService {
     try {
       // Находим животное
       const animal = await this.animalsRepository.findOneBy({ id });
-      if (!animal) {
-        throw new NotFoundException('Животное не найдено');
-      }
 
       // Обновляем базовые данные
       Object.assign(animal, updateData);
@@ -240,9 +237,11 @@ export class AnimalsService {
       if (error instanceof NotFoundException) {
         throw error;
       }
+
       if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
         throw new BadRequestException(error?.detail);
       }
+
       throw new InternalServerErrorException();
     }
   }
