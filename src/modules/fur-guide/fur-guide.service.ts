@@ -13,23 +13,34 @@ export class FurGuideService {
   ) {}
 
   async createFur(data: CreateFurDto): Promise<FurEntity> {
-    const value = this.furRepository.create(data);
-    await this.furRepository.save(value);
+    const fur = this.furRepository.create({
+      code: data.code,
+      name: data.name,
+      description: data.description,
+    });
+    await this.furRepository.save(fur);
 
-    return value;
+    return fur;
   }
 
   async getFurList(): Promise<FurEntity[]> {
     return this.furRepository.find();
   }
 
-  async updateFur({ id, value }: UpdateFurDto): Promise<FurEntity> {
-    await this.furRepository.update(id, { value });
-    return this.furRepository.findOneBy({ id });
+  async updateFur(
+    code: string,
+    { name, description }: UpdateFurDto,
+  ): Promise<FurEntity> {
+    const fur = await this.furRepository.findOne({ where: { code } });
+    if (!fur) {
+      throw new NotFoundException('Тип шерсти не найден.');
+    }
+    await this.furRepository.update(fur.id, { name, description });
+    return this.furRepository.findOneBy({ id: fur.id });
   }
 
-  async removeFur(id: number): Promise<void> {
-    const fur = await this.furRepository.findOneBy({ id });
+  async removeFur(code: string): Promise<void> {
+    const fur = await this.furRepository.findOne({ where: { code } });
 
     if (!fur) {
       throw new NotFoundException('Вид животного не найден.');

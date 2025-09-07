@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -39,18 +38,21 @@ export class FurGuideController {
     return this.FurService.getFurList();
   }
 
-  @Patch()
+  @Patch(':code')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление типа шерсти' })
-  async updateFur(@Body() data: UpdateFurDto): Promise<FurEntity> {
-    return this.FurService.updateFur(data);
+  async updateFur(
+    @Param('code') code: string,
+    @Body() data: UpdateFurDto,
+  ): Promise<FurEntity> {
+    return this.FurService.updateFur(code, data);
   }
 
-  @Delete(':id')
+  @Delete(':code')
   @ApiOperation({ summary: 'Удаление типа шерсти' })
   @ApiOkResponse({ description: 'Тип шерсти успешно удален.' })
   @ApiNotFoundResponse({ description: 'Тип шерсти не найден.' })
-  async removeFur(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.FurService.removeFur(id);
+  async removeFur(@Param('code') code: string): Promise<void> {
+    return this.FurService.removeFur(code);
   }
 }
