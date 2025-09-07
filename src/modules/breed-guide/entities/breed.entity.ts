@@ -3,7 +3,7 @@ import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
 import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
 
-@Entity({ name: 'breed' })
+@Entity({ name: 'breeds' })
 export class BreedEntity extends BaseEntity {
   @Column({ unique: true })
   value: string;

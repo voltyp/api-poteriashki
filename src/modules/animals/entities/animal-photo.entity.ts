@@ -10,7 +10,7 @@ import { Exclude } from 'class-transformer';
 
 import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
 
-@Entity('animal_photo')
+@Entity('animal_photos')
 export class AnimalPhotoEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -15,7 +15,7 @@ import { BaseEntity } from '@/common/entities/base.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { AnimalPhotoEntity } from '@/modules/animals/entities/animal-photo.entity';
 
-@Entity({ name: 'animal' })
+@Entity({ name: 'animals' })
 export class AnimalEntity extends BaseEntity {
   @ApiProperty({ description: 'НК - Новый Кот' })
   @Column({
@@ -25,14 +25,14 @@ export class AnimalEntity extends BaseEntity {
   categoryCode: CategoryCode;
 
   @ApiProperty({ description: 'species-id-year' })
-  @Column()
+  @Column({ unique: true })
   userCode: string;
 
   @ApiProperty({ description: 'Информация о стерилизации' })
   @Column({ default: false })
   isSpayed: boolean;
 
-  @ApiProperty({ description: 'id типа животного' })
+  @ApiProperty({ description: 'Вид животного' })
   @ManyToOne(() => SpeciesEntity, (type) => type.animals, {
     eager: true,
   })
@@ -56,19 +56,19 @@ export class AnimalEntity extends BaseEntity {
   @Column({ nullable: false })
   birthdate: Date;
 
-  @ApiProperty({ description: 'id породы животного' })
+  @ApiProperty({ description: 'Порода животного' })
   @ManyToOne(() => BreedEntity, (breed) => breed.animals, {
     eager: true,
   })
   breed: BreedEntity;
 
-  @ApiProperty({ description: 'id типа шерсти животного' })
+  @ApiProperty({ description: 'Тип шерсти животного' })
   @ManyToOne(() => FurEntity, (fur) => fur.animals, {
     eager: true,
   })
   fur: FurEntity;
 
-  @ApiProperty({ description: 'id цвета окраса животного' })
+  @ApiProperty({ description: 'Окрас животного' })
   @ManyToOne(() => ColorEntity, (color) => color.animals, {
     eager: true,
   })
@@ -88,7 +88,7 @@ export class AnimalEntity extends BaseEntity {
 
   @ApiProperty({ description: 'Дата находки' })
   @Column({ nullable: true })
-  foundDate: string;
+  foundDate: Date;
 
   @ApiProperty({ description: 'Особые приметы' })
   @Column({ nullable: true })
@@ -107,7 +107,6 @@ export class AnimalEntity extends BaseEntity {
   @ApiProperty({ description: 'Фотографии животного' })
   @OneToMany(() => AnimalPhotoEntity, (photo) => photo.animal, {
     eager: true,
-    nullable: true,
   })
   photos: AnimalPhotoEntity[];
 
