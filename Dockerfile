@@ -1,21 +1,38 @@
 FROM node:lts-alpine
 
-RUN apk update && apk add bash && apk add --no-cache coreutils
-RUN npm i -g @nestjs/cli typescript ts-node env-cmd
+# Установка системных зависимостей
+RUN apk update && apk add --no-cache \
+    bash \
+    coreutils
 
-COPY package*.json /tmp/app/
-RUN cd /tmp/app && npm install
+# Установка глобальных npm пакетов
+RUN npm i -g @nestjs/cli typescript ts-node env-cmd --production
 
-COPY . /usr/src/app
-RUN cp -a /tmp/app/node_modules /usr/src/app
-COPY ./wait-for-it.sh /usr/local/bin/wait-for-it.sh
-COPY ./startup.dev.sh /usr/local/bin/startup.dev.sh
-RUN chmod +x /usr/local/bin/wait-for-it.sh
-RUN chmod +x /usr/local/bin/startup.dev.sh
-RUN sed -i 's/\r//g' /usr/local/bin/wait-for-it.sh
-RUN sed -i 's/\r//g' /usr/local/bin/startup.dev.sh
+# Создание пользователя без прав root
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nestjs -u 1001
 
+# Копирование и установка зависимостей
 WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm ci
+
+# Копирование исходного кода
+COPY . .
+
+# Сборка приложения
 RUN npm run build
 
-CMD ["/usr/local/bin/startup.dev.sh"]
+# Изменение владельца файлов
+RUN chown -R nestjs:nodejs /usr/src/app
+USER nestjs
+
+# Открытие порта
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+# Запуск приложения
+CMD ["npm", "run", "start:prod"]

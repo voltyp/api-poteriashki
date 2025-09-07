@@ -2,7 +2,7 @@ import { Entity, OneToMany, Column } from 'typeorm';
 import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
 
-@Entity({ name: 'fur' })
+@Entity({ name: 'furs' })
 export class FurEntity extends BaseEntity {
   @Column({ unique: true })
   value: string;
