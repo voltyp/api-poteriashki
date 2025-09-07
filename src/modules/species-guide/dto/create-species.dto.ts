@@ -1,10 +1,16 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 
 export class CreateSpeciesDto {
-  @Transform(({ value }) => value.toLowerCase())
-  @ApiProperty({ example: 'кошка', description: 'Вид животного' })
+  @ApiProperty({ example: 'CAT', description: 'Код вида (уникальный)' })
   @IsNotEmpty()
-  readonly value: string;
+  readonly code: string;
+
+  @ApiProperty({ example: 'Кошка', description: 'Название вида' })
+  @IsNotEmpty()
+  readonly name: string;
+
+  @ApiProperty({ example: 'Домашняя кошка', required: false })
+  @IsOptional()
+  readonly description?: string;
 }

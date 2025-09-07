@@ -20,10 +20,14 @@ export class SpeciesGuideService {
 
   async createSpecies(data: CreateSpeciesDto): Promise<SpeciesEntity> {
     try {
-      const value = this.typeRepository.create(data);
-      await this.typeRepository.save(value);
+      const species = this.typeRepository.create({
+        code: data.code,
+        name: data.name,
+        description: data.description,
+      });
+      await this.typeRepository.save(species);
 
-      return value;
+      return species;
     } catch (error) {
       if (error?.code === PostgresErrorCode.UniqueViolation) {
         throw new BadRequestException('Такой вид уже существует.');
@@ -37,13 +41,20 @@ export class SpeciesGuideService {
     return this.typeRepository.find();
   }
 
-  async updateSpecies({ id, value }: UpdateSpeciesDto): Promise<SpeciesEntity> {
-    await this.typeRepository.update(id, { value });
-    return this.typeRepository.findOneBy({ id });
+  async updateSpecies(
+    code: string,
+    { name, description }: UpdateSpeciesDto,
+  ): Promise<SpeciesEntity> {
+    const species = await this.typeRepository.findOne({ where: { code } });
+    if (!species) {
+      throw new NotFoundException('Вид животного не найден.');
+    }
+    await this.typeRepository.update(species.id, { name, description });
+    return this.typeRepository.findOneBy({ id: species.id });
   }
 
-  async removeSpecies(id: number): Promise<void> {
-    const animalType = await this.typeRepository.findOneBy({ id });
+  async removeSpecies(code: string): Promise<void> {
+    const animalType = await this.typeRepository.findOne({ where: { code } });
 
     if (!animalType) {
       throw new NotFoundException('Вид животного не найден.');

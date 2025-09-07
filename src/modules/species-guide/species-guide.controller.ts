@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -42,18 +41,21 @@ export class SpeciesGuideController {
     return this.speciesService.getSpeciesList();
   }
 
-  @Patch()
+  @Patch(':code')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление вида' })
-  async updateType(@Body() data: UpdateSpeciesDto): Promise<SpeciesEntity> {
-    return this.speciesService.updateSpecies(data);
+  async updateType(
+    @Param('code') code: string,
+    @Body() data: UpdateSpeciesDto,
+  ): Promise<SpeciesEntity> {
+    return this.speciesService.updateSpecies(code, data);
   }
 
-  @Delete(':id')
+  @Delete(':code')
   @ApiOperation({ summary: 'Удаление вида животного' })
   @ApiOkResponse({ description: 'Вид успешно удален.' })
   @ApiNotFoundResponse({ description: 'Вид не найден.' })
-  async removeType(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.speciesService.removeSpecies(id);
+  async removeType(@Param('code') code: string): Promise<void> {
+    return this.speciesService.removeSpecies(code);
   }
 }
