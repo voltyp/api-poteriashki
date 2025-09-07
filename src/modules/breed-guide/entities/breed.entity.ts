@@ -6,10 +6,13 @@ import { BaseEntity } from '@/common/entities/base.entity';
 @Entity({ name: 'breeds' })
 export class BreedEntity extends BaseEntity {
   @Column({ unique: true })
-  value: string;
-
-  @Column({ unique: true })
   code: string;
+
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
+  description?: string;
 
   @ManyToOne(() => SpeciesEntity, (type) => type.breeds)
   species: SpeciesEntity;

@@ -21,7 +21,12 @@ export class BreedGuideService {
 
   async createBreed(data: CreateBreedDto): Promise<BreedEntity> {
     try {
-      const breed = this.breedRepository.create(data);
+      const breed = this.breedRepository.create({
+        code: data.code,
+        name: data.name,
+        description: data.description,
+        species: data.species,
+      });
       await this.breedRepository.save(breed);
 
       return breed;
@@ -42,13 +47,20 @@ export class BreedGuideService {
     });
   }
 
-  async updateBreed({ id, value }: UpdateSpeciesDto): Promise<BreedEntity> {
-    await this.breedRepository.update(id, { value });
-    return this.breedRepository.findOneBy({ id });
+  async updateBreed(
+    code: string,
+    { name, description }: UpdateSpeciesDto,
+  ): Promise<BreedEntity> {
+    const breed = await this.breedRepository.findOne({ where: { code } });
+    if (!breed) {
+      throw new NotFoundException('Порода не найдена.');
+    }
+    await this.breedRepository.update(breed.id, { name, description });
+    return this.breedRepository.findOneBy({ id: breed.id });
   }
 
-  async removeBreed(id: number): Promise<void> {
-    const breed = await this.breedRepository.findOneBy({ id });
+  async removeBreed(code: string): Promise<void> {
+    const breed = await this.breedRepository.findOne({ where: { code } });
 
     if (!breed) {
       throw new NotFoundException('Порода не найдена.');

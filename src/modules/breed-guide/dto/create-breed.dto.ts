@@ -1,13 +1,19 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 
 export class CreateBreedDto {
-  @Transform(({ value }) => value.toLowerCase())
-  @ApiProperty({ example: 'Корги', description: 'Порода животного' })
+  @ApiProperty({ example: 'SCOTTISH', description: 'Код породы (уникальный)' })
   @IsNotEmpty()
-  readonly value: string;
+  readonly code: string;
+
+  @ApiProperty({ example: 'Скоттиш-фолд', description: 'Название породы' })
+  @IsNotEmpty()
+  readonly name: string;
+
+  @ApiProperty({ example: 'Вислоухая кошка', required: false })
+  @IsOptional()
+  readonly description?: string;
 
   @ApiProperty({ description: 'id вида животного' })
   @IsNotEmpty()

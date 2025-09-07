@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -39,18 +38,21 @@ export class BreedGuideController {
     return this.breedGuideService.getListBreed();
   }
 
-  @Patch()
+  @Patch(':code')
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiOperation({ summary: 'Обновление породы' })
-  async updateBreed(@Body() data: UpdateBreedDto): Promise<BreedEntity> {
-    return this.breedGuideService.updateBreed(data);
+  async updateBreed(
+    @Param('code') code: string,
+    @Body() data: UpdateBreedDto,
+  ): Promise<BreedEntity> {
+    return this.breedGuideService.updateBreed(code, data);
   }
 
-  @Delete(':id')
+  @Delete(':code')
   @ApiOperation({ summary: 'Удаление породы' })
   @ApiOkResponse({ description: 'Порода успешно удалена.' })
   @ApiNotFoundResponse({ description: 'Порода не найдена.' })
-  async removeType(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.breedGuideService.removeBreed(id);
+  async removeType(@Param('code') code: string): Promise<void> {
+    return this.breedGuideService.removeBreed(code);
   }
 }
