@@ -19,6 +19,7 @@ import {
 import { FurGuideService } from './fur-guide.service';
 import { CreateFurDto, UpdateFurDto } from './dto';
 import { FurEntity } from './entities/fur.entity';
+import { OptionDto } from '@/common/dto';
 
 @ApiTags('Fur-guide')
 @Controller('fur-guide')
@@ -36,6 +37,13 @@ export class FurGuideController {
   @ApiOperation({ summary: 'Получение списка типа шерсти' })
   async getFurList(): Promise<FurEntity[]> {
     return this.FurService.getFurList();
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: 'Опции типа шерсти (title=name, value=code)' })
+  @ApiOkResponse({ type: [OptionDto] })
+  async getFurOptions(): Promise<OptionDto<string>[]> {
+    return this.FurService.getFurOptions();
   }
 
   @Patch(':code')

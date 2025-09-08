@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { FurEntity } from './entities/fur.entity';
 import { CreateFurDto, UpdateFurDto } from './dto';
+import { OptionDto } from '@/common/dto';
 
 @Injectable()
 export class FurGuideService {
@@ -25,6 +26,11 @@ export class FurGuideService {
 
   async getFurList(): Promise<FurEntity[]> {
     return this.furRepository.find();
+  }
+
+  async getFurOptions(): Promise<OptionDto<string>[]> {
+    const list = await this.furRepository.find({ select: ['name', 'code'] });
+    return list.map((f) => ({ title: f.name, value: f.code }));
   }
 
   async updateFur(

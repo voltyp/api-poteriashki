@@ -19,6 +19,7 @@ import {
 import { ColorGuideService } from './color-guide.service';
 import { UpdateColorDto, CreateColorDto } from './dto';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
+import { OptionDto } from '@/common/dto';
 
 @ApiTags('Color-guide')
 @Controller('color-guide')
@@ -36,6 +37,13 @@ export class ColorGuideController {
   @ApiOperation({ summary: 'Получения списка цветов' })
   async getAllBreed(): Promise<ColorEntity[]> {
     return this.colorService.getColorList();
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: 'Опции цветов (title=name, value=code)' })
+  @ApiOkResponse({ type: [OptionDto] })
+  async getColorOptions(): Promise<OptionDto<string>[]> {
+    return this.colorService.getColorOptions();
   }
 
   @Patch(':code')

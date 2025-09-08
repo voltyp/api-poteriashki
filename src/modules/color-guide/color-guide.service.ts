@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { ColorEntity } from './entities/color.entity';
 import { UpdateColorDto, CreateColorDto } from './dto';
+import { OptionDto } from '@/common/dto';
 
 @Injectable()
 export class ColorGuideService {
@@ -26,6 +27,11 @@ export class ColorGuideService {
 
   async getColorList(): Promise<ColorEntity[]> {
     return this.colorRepository.find();
+  }
+
+  async getColorOptions(): Promise<OptionDto<string>[]> {
+    const list = await this.colorRepository.find({ select: ['name', 'code'] });
+    return list.map((c) => ({ title: c.name, value: c.code }));
   }
 
   async updateColor(

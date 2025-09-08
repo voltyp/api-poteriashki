@@ -19,6 +19,7 @@ import {
 import { BreedGuideService } from './breed-guide.service';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { CreateBreedDto, UpdateBreedDto } from './dto';
+import { OptionDto } from '@/common/dto';
 
 @ApiTags('Breed-guide')
 @Controller('breed-guide')
@@ -36,6 +37,13 @@ export class BreedGuideController {
   @ApiOperation({ summary: 'Получения списка пород' })
   async getBreedList(): Promise<BreedEntity[]> {
     return this.breedGuideService.getListBreed();
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: 'Опции пород (title=name, value=code)' })
+  @ApiOkResponse({ type: [OptionDto] })
+  async getBreedOptions(): Promise<OptionDto<string>[]> {
+    return this.breedGuideService.getBreedOptions();
   }
 
   @Patch(':code')

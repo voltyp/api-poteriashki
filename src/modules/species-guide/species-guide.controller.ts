@@ -22,6 +22,7 @@ import {
   UpdateSpeciesDto,
 } from '@/modules/species-guide/dto';
 import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
+import { OptionDto } from '@/common/dto';
 
 @ApiTags('species-guide')
 @Controller('species-guide')
@@ -39,6 +40,13 @@ export class SpeciesGuideController {
   @ApiOperation({ summary: 'Получение списка видов животных' })
   async getTypeList(): Promise<SpeciesEntity[]> {
     return this.speciesService.getSpeciesList();
+  }
+
+  @Get('options')
+  @ApiOperation({ summary: 'Опции видов (title=name, value=code)' })
+  @ApiOkResponse({ type: [OptionDto] })
+  async getSpeciesOptions(): Promise<OptionDto<string>[]> {
+    return this.speciesService.getSpeciesOptions();
   }
 
   @Patch(':code')

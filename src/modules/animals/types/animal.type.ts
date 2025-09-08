@@ -1,19 +1,28 @@
+/** Статусы животных в системе */
 export enum AnimalStatus {
-  FindingOwner, // Ищет хозяина
-  Lost, // Потерян
-  OwnerFound, // Хозяин найден
-  Quarantine, // На карантине
-  Check, // На проверке
-  RainbowRoad, // В путь по радуге
-  Deleted, // Удален
+  /** Ищет хозяина */
+  FindingOwner = 'FINDING_OWNER',
+  /** Потерян */
+  Lost = 'LOST',
+  /** Хозяин найден */
+  OwnerFound = 'OWNER_FOUND',
+  /** На карантине */
+  Quarantine = 'QUARANTINE',
+  /** На проверке */
+  Check = 'CHECK',
+  /** В путь по радуге (умер) */
+  RainbowRoad = 'RAINBOW_ROAD',
+  /** Удален из системы */
+  Deleted = 'DELETED',
 }
 
 export enum CategoryCode {
-  NewCat, // НК
-  NewDog, // НС
+  /** Новая кошка (НК) */
+  NewCat = 'NEW_CAT',
+  /** Новая собака (НС) */
+  NewDog = 'NEW_DOG',
 }
-
 export enum Gender {
-  Male,
-  Female,
+  Male = 'MALE',
+  Female = 'FEMALE',
 }

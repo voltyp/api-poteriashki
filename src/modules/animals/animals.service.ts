@@ -76,10 +76,10 @@ export class AnimalsService {
     return entity;
   }
 
-  private async findUserByEmail(email: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { email } });
+  private async findUserById(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new BadRequestException(`Пользователь с email ${email} не найден`);
+      throw new BadRequestException(`Пользователь с ID ${id} не найден`);
     }
     return user;
   }
@@ -91,7 +91,7 @@ export class AnimalsService {
       breedCode,
       furCode,
       colorCode,
-      curatorEmail,
+      curatorId,
       ...animalData
     } = data;
 
@@ -118,9 +118,9 @@ export class AnimalsService {
         color,
       });
 
-      // Если указан куратор, находим его по email
-      if (curatorEmail) {
-        animal.curator = await this.findUserByEmail(curatorEmail);
+      // Если указан куратор, находим его по id
+      if (curatorId) {
+        animal.curator = await this.findUserById(curatorId);
       }
 
       // Генерируем userCode
@@ -174,7 +174,7 @@ export class AnimalsService {
       breedCode,
       furCode,
       colorCode,
-      curatorEmail,
+      curatorId,
       ...updateData
     } = data;
 
@@ -210,8 +210,8 @@ export class AnimalsService {
         );
       }
 
-      if (curatorEmail) {
-        animal.curator = await this.findUserByEmail(curatorEmail);
+      if (curatorId) {
+        animal.curator = await this.findUserById(curatorId);
       }
 
       // Сохраняем обновленное животное

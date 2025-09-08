@@ -6,6 +6,7 @@ import {
   IsString,
   IsDateString,
   IsBoolean,
+  IsNumber,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -135,10 +136,10 @@ export class AnimalUpdateDto {
   readonly photos?: Express.Multer.File[];
 
   @ApiProperty({
-    example: 'volunteer@example.com',
-    description: 'Email ответственного волонтера за животное',
+    example: '0',
+    description: 'ID ответственного волонтера за животное',
   })
   @IsOptional()
-  @IsString()
-  readonly curatorEmail?: string;
+  @IsNumber()
+  readonly curatorId?: number;
 }

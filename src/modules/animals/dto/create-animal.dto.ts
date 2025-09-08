@@ -5,6 +5,7 @@ import {
   IsString,
   IsDateString,
   IsBoolean,
+  IsNumber,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -24,7 +25,6 @@ export class CreateAnimalDto {
   })
   @IsNotEmpty({ message: 'Категория животного обязательна' })
   @IsEnum(CategoryCode, { message: 'Неверный код категории' })
-  @Transform(({ value }) => parseInt(value))
   readonly categoryCode: CategoryCode;
 
   @ApiProperty({
@@ -65,7 +65,6 @@ export class CreateAnimalDto {
   })
   @IsNotEmpty({ message: 'Пол животного обязателен' })
   @IsEnum(Gender, { message: 'Неверное значение пола' })
-  @Transform(({ value }) => parseInt(value))
   readonly gender: Gender;
 
   @ApiProperty({
@@ -109,7 +108,6 @@ export class CreateAnimalDto {
   })
   @IsNotEmpty({ message: 'Статус животного обязателен' })
   @IsEnum(AnimalStatus, { message: 'Неверный статус животного' })
-  @Transform(({ value }) => parseInt(value))
   readonly status: AnimalStatus;
 
   @ApiProperty({
@@ -164,6 +162,7 @@ export class CreateAnimalDto {
     description: 'Нужна ли передержка животному?',
   })
   @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
   readonly isNeedFoster: boolean;
 
   // Media and Management
@@ -177,11 +176,12 @@ export class CreateAnimalDto {
   readonly photos?: Express.Multer.File[];
 
   @ApiProperty({
-    example: 'volunteer@example.com',
-    description: 'Email ответственного волонтера за животное',
+    example: 1,
+    description: 'ID ответственного волонтера за животное',
     required: false,
   })
   @IsOptional()
-  @IsString()
-  readonly curatorEmail?: string;
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  readonly curatorId?: number;
 }

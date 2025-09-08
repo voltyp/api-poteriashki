@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateSpeciesDto, UpdateSpeciesDto } from './dto';
 import { SpeciesEntity } from './entities/species.entity';
 import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
+import { OptionDto } from '@/common/dto';
 
 @Injectable()
 export class SpeciesGuideService {
@@ -39,6 +40,11 @@ export class SpeciesGuideService {
 
   async getSpeciesList(): Promise<SpeciesEntity[]> {
     return this.typeRepository.find();
+  }
+
+  async getSpeciesOptions(): Promise<OptionDto<string>[]> {
+    const list = await this.typeRepository.find({ select: ['name', 'code'] });
+    return list.map((s) => ({ title: s.name, value: s.code }));
   }
 
   async updateSpecies(

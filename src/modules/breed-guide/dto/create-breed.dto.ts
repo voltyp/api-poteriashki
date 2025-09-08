@@ -1,21 +1,24 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 
 export class CreateBreedDto {
   @ApiProperty({ example: 'SCOTTISH', description: 'Код породы (уникальный)' })
   @IsNotEmpty()
+  @IsString()
   readonly code: string;
 
   @ApiProperty({ example: 'Скоттиш-фолд', description: 'Название породы' })
   @IsNotEmpty()
+  @IsString()
   readonly name: string;
 
   @ApiProperty({ example: 'Вислоухая кошка', required: false })
   @IsOptional()
+  @IsString()
   readonly description?: string;
 
-  @ApiProperty({ description: 'id вида животного' })
+  @ApiProperty({ example: 'CAT', description: 'Код вида животного' })
   @IsNotEmpty()
-  readonly species: SpeciesEntity;
+  @IsString()
+  readonly species: string;
 }
