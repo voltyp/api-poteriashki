@@ -1,16 +1,11 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-
-import {
-  AnimalStatus,
-  CategoryCode,
-  Gender,
-} from '@/modules/animals/types/animal.type';
-
+import { CategoryCode, Gender } from '@/modules/animals/types/animal.type';
 import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
+import { AnimalStatusEntity } from '@/modules/animal-status-guide/entities/animal-status.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { AnimalPhotoEntity } from '@/modules/animals/entities/animal-photo.entity';
@@ -75,12 +70,10 @@ export class AnimalEntity extends BaseEntity {
   color: ColorEntity;
 
   @ApiProperty({ description: 'Статус животного' })
-  @Column({
-    type: 'enum',
-    enum: AnimalStatus,
-    default: AnimalStatus.Check,
+  @ManyToOne(() => AnimalStatusEntity, (status) => status.animals, {
+    eager: true,
   })
-  status: AnimalStatus;
+  status: AnimalStatusEntity;
 
   @ApiProperty({ description: 'Место находки' })
   @Column({ nullable: true })

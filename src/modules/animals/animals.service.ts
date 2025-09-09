@@ -18,6 +18,7 @@ import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
+import { AnimalStatusEntity } from '@/modules/animal-status-guide/entities/animal-status.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { CreateAnimalDto } from './dto/create-animal.dto';
 
@@ -37,6 +38,8 @@ export class AnimalsService {
     private readonly furRepository: Repository<FurEntity>,
     @InjectRepository(ColorEntity)
     private readonly colorRepository: Repository<ColorEntity>,
+    @InjectRepository(AnimalStatusEntity)
+    private readonly animalStatusRepository: Repository<AnimalStatusEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
@@ -91,13 +94,14 @@ export class AnimalsService {
       breedCode,
       furCode,
       colorCode,
+      statusCode,
       curatorId,
       ...animalData
     } = data;
 
     try {
       // Находим все связанные сущности по кодам
-      const [species, breed, fur, color] = await Promise.all([
+      const [species, breed, fur, color, status] = await Promise.all([
         this.findEntityByCode(
           this.speciesRepository,
           speciesCode,
@@ -106,6 +110,11 @@ export class AnimalsService {
         this.findEntityByCode(this.breedRepository, breedCode, 'Порода'),
         this.findEntityByCode(this.furRepository, furCode, 'Тип шерсти'),
         this.findEntityByCode(this.colorRepository, colorCode, 'Окрас'),
+        this.findEntityByCode(
+          this.animalStatusRepository,
+          statusCode,
+          'Статус',
+        ),
       ]);
 
       // Создаем животное
@@ -116,6 +125,7 @@ export class AnimalsService {
         breed,
         fur,
         color,
+        status,
       });
 
       // Если указан куратор, находим его по id

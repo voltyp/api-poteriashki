@@ -10,11 +10,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  AnimalStatus,
-  CategoryCode,
-  Gender,
-} from '@/modules/animals/types/animal.type';
+import { CategoryCode, Gender } from '@/modules/animals/types/animal.type';
 import { Transform } from 'class-transformer';
 
 export class CreateAnimalDto {
@@ -32,10 +28,7 @@ export class CreateAnimalDto {
     description: 'Уникальный код животного в формате: uniqNum-species-year',
   })
   @IsString()
-  @MinLength(5, {
-    message: 'Код животного должен содержать минимум 5 символов',
-  })
-  @MaxLength(20, { message: 'Код животного не должен превышать 20 символов' })
+  @IsOptional()
   readonly userCode: string;
 
   @ApiProperty({
@@ -102,13 +95,12 @@ export class CreateAnimalDto {
 
   // Status and Location
   @ApiProperty({
-    example: AnimalStatus.Check,
-    description: 'Статус животного',
-    enum: AnimalStatus,
+    example: 'CHECK',
+    description: 'Код статуса животного',
   })
-  @IsNotEmpty({ message: 'Статус животного обязателен' })
-  @IsEnum(AnimalStatus, { message: 'Неверный статус животного' })
-  readonly status: AnimalStatus;
+  @IsNotEmpty({ message: 'Код статуса животного обязателен' })
+  @IsString()
+  readonly statusCode: string;
 
   @ApiProperty({
     example: 'Ленина 1',

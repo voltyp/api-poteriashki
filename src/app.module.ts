@@ -11,6 +11,7 @@ import { FurGuideModule } from './modules/fur-guide/fur-guide.module';
 import { BreedGuideModule } from './modules/breed-guide/breed-guide.module';
 import { SpeciesGuideModule } from '@/modules/species-guide/species-guide.module';
 import { ColorGuideModule } from './modules/color-guide/color-guide.module';
+import { AnimalStatusGuideModule } from './modules/animal-status-guide/animal-status-guide.module';
 import { AuthModule } from './modules/auth/auth.module';
 import databaseConfig from './database/db.config';
 import { APP_GUARD } from '@nestjs/core';
@@ -40,6 +41,7 @@ import { join } from 'path';
     BreedGuideModule,
     SpeciesGuideModule,
     ColorGuideModule,
+    AnimalStatusGuideModule,
     AuthModule,
   ],
   controllers: [AppController],

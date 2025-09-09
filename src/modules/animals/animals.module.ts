@@ -12,8 +12,10 @@ import { SpeciesEntity } from '@/modules/species-guide/entities/species.entity';
 import { BreedEntity } from '@/modules/breed-guide/entities/breed.entity';
 import { FurEntity } from '@/modules/fur-guide/entities/fur.entity';
 import { ColorEntity } from '@/modules/color-guide/entities/color.entity';
+import { AnimalStatusEntity } from '@/modules/animal-status-guide/entities/animal-status.entity';
 import { UserEntity } from '@/modules/users/entities/user.entity';
 import { ColorGuideModule } from '@/modules/color-guide/color-guide.module';
+import { AnimalStatusGuideModule } from '@/modules/animal-status-guide/animal-status-guide.module';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { ColorGuideModule } from '@/modules/color-guide/color-guide.module';
       BreedEntity,
       FurEntity,
       ColorEntity,
+      AnimalStatusEntity,
       UserEntity,
     ]),
     MulterModule.register({
@@ -37,6 +40,7 @@ import { ColorGuideModule } from '@/modules/color-guide/color-guide.module';
       },
     }),
     ColorGuideModule,
+    AnimalStatusGuideModule,
   ],
   controllers: [AnimalsController],
   providers: [AnimalsService],
