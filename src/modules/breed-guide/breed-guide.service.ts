@@ -52,19 +52,13 @@ export class BreedGuideService {
     { name, description }: UpdateSpeciesDto,
   ): Promise<BreedEntity> {
     const breed = await this.breedRepository.findOne({ where: { code } });
-    if (!breed) {
-      throw new NotFoundException('Порода не найдена.');
-    }
+
     await this.breedRepository.update(breed.id, { name, description });
     return this.breedRepository.findOneBy({ id: breed.id });
   }
 
   async removeBreed(code: string): Promise<void> {
     const breed = await this.breedRepository.findOne({ where: { code } });
-
-    if (!breed) {
-      throw new NotFoundException('Порода не найдена.');
-    }
 
     await this.breedRepository.remove(breed);
   }

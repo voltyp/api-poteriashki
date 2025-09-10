@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 
 import { CreateSpeciesDto, UpdateSpeciesDto } from './dto';
 import { SpeciesEntity } from './entities/species.entity';
-import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 import { OptionDto } from '@/common/dto';
 
 @Injectable()
@@ -20,22 +19,14 @@ export class SpeciesGuideService {
   ) {}
 
   async createSpecies(data: CreateSpeciesDto): Promise<SpeciesEntity> {
-    try {
-      const species = this.typeRepository.create({
-        code: data.code,
-        name: data.name,
-        description: data.description,
-      });
-      await this.typeRepository.save(species);
+    const species = this.typeRepository.create({
+      code: data.code,
+      name: data.name,
+      description: data.description,
+    });
+    await this.typeRepository.save(species);
 
-      return species;
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new BadRequestException('Такой вид уже существует.');
-      }
-
-      throw new InternalServerErrorException();
-    }
+    return species;
   }
 
   async getSpeciesList(): Promise<SpeciesEntity[]> {

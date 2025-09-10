@@ -1,14 +1,12 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere } from 'typeorm';
 import { AnimalEntity } from '@/modules/animals/entities/animal.entity';
-import { PostgresErrorCode } from '@/database/constraints/errors.constraint';
 import { createUserCode, parseUserCode } from '@/common/utils';
 import { AnimalPhotoEntity } from '@/modules/animals/entities/animal-photo.entity';
 import { changePath } from '@/common/file-utilities';
@@ -99,65 +97,53 @@ export class AnimalsService {
       ...animalData
     } = data;
 
-    try {
-      // Находим все связанные сущности по кодам
-      const [species, breed, fur, color, status] = await Promise.all([
-        this.findEntityByCode(
-          this.speciesRepository,
-          speciesCode,
-          'Вид животного',
-        ),
-        this.findEntityByCode(this.breedRepository, breedCode, 'Порода'),
-        this.findEntityByCode(this.furRepository, furCode, 'Тип шерсти'),
-        this.findEntityByCode(this.colorRepository, colorCode, 'Окрас'),
-        this.findEntityByCode(
-          this.animalStatusRepository,
-          statusCode,
-          'Статус',
-        ),
-      ]);
+    // Находим все связанные сущности по кодам
+    const [species, breed, fur, color, status] = await Promise.all([
+      this.findEntityByCode(
+        this.speciesRepository,
+        speciesCode,
+        'Вид животного',
+      ),
+      this.findEntityByCode(this.breedRepository, breedCode, 'Порода'),
+      this.findEntityByCode(this.furRepository, furCode, 'Тип шерсти'),
+      this.findEntityByCode(this.colorRepository, colorCode, 'Окрас'),
+      this.findEntityByCode(this.animalStatusRepository, statusCode, 'Статус'),
+    ]);
 
-      // Создаем животное
-      const animal = new AnimalEntity();
-      Object.assign(animal, {
-        ...animalData,
-        species,
-        breed,
-        fur,
-        color,
-        status,
-      });
+    // Создаем животное
+    const animal = new AnimalEntity();
+    Object.assign(animal, {
+      ...animalData,
+      species,
+      breed,
+      fur,
+      color,
+      status,
+    });
 
-      // Если указан куратор, находим его по id
-      if (curatorId) {
-        animal.curator = await this.findUserById(curatorId);
-      }
-
-      // Генерируем userCode
-      animal.userCode = await this.generateUserCode(animal.categoryCode);
-
-      // Сохраняем животное
-      await this.animalsRepository.save(animal);
-
-      // Сохраняем фотографии
-      if (photos?.length) {
-        for (const file of photos) {
-          const photo = new AnimalPhotoEntity();
-          photo.path = changePath(file);
-          photo.originalName = file.originalname;
-          photo.animal = animal;
-          await this.animalPhotoRepository.save(photo);
-        }
-      }
-
-      return animal;
-    } catch (error) {
-      if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
-        throw new BadRequestException(error?.detail);
-      }
-
-      throw new InternalServerErrorException();
+    // Если указан куратор, находим его по id
+    if (curatorId) {
+      animal.curator = await this.findUserById(curatorId);
     }
+
+    // Генерируем userCode
+    animal.userCode = await this.generateUserCode(animal.categoryCode);
+
+    // Сохраняем животное
+    await this.animalsRepository.save(animal);
+
+    // Сохраняем фотографии
+    if (photos?.length) {
+      for (const file of photos) {
+        const photo = new AnimalPhotoEntity();
+        photo.path = changePath(file);
+        photo.originalName = file.originalname;
+        photo.animal = animal;
+        await this.animalPhotoRepository.save(photo);
+      }
+    }
+
+    return animal;
   }
 
   async getAnimals(): Promise<AnimalEntity[]> {
@@ -188,72 +174,64 @@ export class AnimalsService {
       ...updateData
     } = data;
 
-    try {
-      // Находим животное
-      const animal = await this.animalsRepository.findOneBy({ id });
+    // Находим животное
+    const animal = await this.animalsRepository.findOneBy({ id });
 
-      // Обновляем базовые данные
-      Object.assign(animal, updateData);
-
-      // Обновляем связанные сущности, если они указаны
-      if (breedCode) {
-        animal.breed = await this.findEntityByCode(
-          this.breedRepository,
-          breedCode,
-          'Порода',
-        );
-      }
-
-      if (furCode) {
-        animal.fur = await this.findEntityByCode(
-          this.furRepository,
-          furCode,
-          'Тип шерсти',
-        );
-      }
-
-      if (colorCode) {
-        animal.color = await this.findEntityByCode(
-          this.colorRepository,
-          colorCode,
-          'Окрас',
-        );
-      }
-
-      if (curatorId) {
-        animal.curator = await this.findUserById(curatorId);
-      }
-
-      // Сохраняем обновленное животное
-      await this.animalsRepository.save(animal);
-
-      // Обновляем фотографии, если они есть
-      if (photos?.length) {
-        // Удаляем старые фотографии
-        await this.animalPhotoRepository.delete({ animal: { id: animal.id } });
-
-        // Сохраняем новые фотографии
-        for (const file of photos) {
-          const photo = new AnimalPhotoEntity();
-          photo.path = changePath(file);
-          photo.originalName = file.originalname;
-          photo.animal = animal;
-          await this.animalPhotoRepository.save(photo);
-        }
-      }
-
-      return animal;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-
-      if (error?.code === PostgresErrorCode.ForeignKeyViolation) {
-        throw new BadRequestException(error?.detail);
-      }
-
-      throw new InternalServerErrorException();
+    if (!animal) {
+      throw new NotFoundException('Животное не найдено.');
     }
+
+    // Обновляем базовые данные
+    Object.assign(animal, updateData);
+
+    // Обновляем связанные сущности, если они указаны
+    if (breedCode) {
+      animal.breed = await this.findEntityByCode(
+        this.breedRepository,
+        breedCode,
+        'Порода',
+      );
+    }
+
+    if (furCode) {
+      animal.fur = await this.findEntityByCode(
+        this.furRepository,
+        furCode,
+        'Тип шерсти',
+      );
+    }
+
+    if (colorCode) {
+      animal.color = await this.findEntityByCode(
+        this.colorRepository,
+        colorCode,
+        'Окрас',
+      );
+    }
+
+    if (curatorId) {
+      animal.curator = await this.findUserById(curatorId);
+    }
+
+    // Сохраняем обновленное животное
+    await this.animalsRepository.save(animal);
+
+    // Обновляем фотографии, если они есть
+    if (photos?.length) {
+      // Удаляем старые фотографии
+      await this.animalPhotoRepository.delete({ animal: { id: animal.id } });
+
+      // Сохраняем новые фотографии
+      for (const file of photos) {
+        const photo = new AnimalPhotoEntity();
+        photo.path = changePath(file);
+        photo.originalName = file.originalname;
+        photo.animal = animal;
+        await this.animalPhotoRepository.save(photo);
+      }
+    }
+
+    return animal;
   }
 
   async deleteAnimal(id: number): Promise<void> {
